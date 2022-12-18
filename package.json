@@ -6,7 +6,8 @@
   "scripts": {
     "server:dev": "pnpm --filter server start",
     "client:dev": "pnpm --filter client dev",
-    "dev": "concurrently \"pnpm server:dev\" \"pnpm client:dev\""
+    "dev": "concurrently \"pnpm server:dev\" \"pnpm client:dev\"",
+    "format": "pnpm -r format"
   },
   "keywords": [],
   "author": "",

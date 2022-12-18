@@ -15,7 +15,7 @@ async function getTodos() {
 
 function HelloWorld() {
   // Queries
-  const query = useQuery({ queryKey: ["hello"], queryFn: getTodos });
+  const query = useQuery({ queryKey: ["todos"], queryFn: getTodos });
 
   if (!query.data) {
     return null;
@@ -23,7 +23,9 @@ function HelloWorld() {
 
   return (
     <ul>
-      {query.data.map((todo: string) => <li>{todo}</li>)}
+      {query.data.map((todo: string) => (
+        <li key={todo}>{todo}</li>
+      ))}
     </ul>
   );
 }

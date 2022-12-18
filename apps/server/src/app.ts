@@ -1,17 +1,14 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
+
 app.get("/", (_req, res) => {
-  res.writeHead(200, {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  });
-
+  res.status(200);
   const todos = ["Buy milk", "Write code", "Exercise"];
-  res.write(JSON.stringify(todos));
-
-  res.end();
+  res.json(todos);
 });
 
 const PORT = process.env.PORT;
