@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "@todo/client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
     "format": "prettier --ignore-path .gitignore \"**/*.+(ts|tsx|js|css|json)\" --write --list-different"
   },
   "dependencies": {
-    "@tanstack/react-query": "^4.20.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "swr": "^2.0.0"

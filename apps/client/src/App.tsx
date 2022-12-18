@@ -5,7 +5,16 @@ import "./App.css";
 
 async function getTodos() {
   try {
-    const res = await fetch("http://localhost:3004/");
+    const res = await fetch("http://localhost:3004/todos");
+    return await res.json();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function getUsers() {
+  try {
+    const res = await fetch("http://localhost:3004/users");
     return await res.json();
   } catch (e) {
     console.error(e);
@@ -36,12 +45,37 @@ function Todos() {
   );
 }
 
+function Users() {
+  const { data, error, isLoading } = useSWR("users", getUsers);
+
+  if (!data) {
+    return null;
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <ul>
+      {data.map((user: any) => (
+        <li key={user.id}>{user.email}</li>
+      ))}
+    </ul>
+  );
+}
+
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <div className="App">
       <Todos />
+      <Users />
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo" alt="Vite logo" />

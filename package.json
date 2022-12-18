@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server:dev": "pnpm --filter server start",
+    "server:dev": "pnpm --filter server dev",
     "client:dev": "pnpm --filter client dev",
     "dev": "concurrently \"pnpm server:dev\" \"pnpm client:dev\"",
     "format": "pnpm -r format"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nikolay Rademacher",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^7.6.0"
