@@ -7,7 +7,7 @@ app.use(cors());
 
 app.get("/", (_req, res) => {
   res.status(200);
-  const todos = ["Buy milk", "Write code", "Exercise"];
+  const todos = ["Buy coffee", "Write code", "Exercise"];
   res.json(todos);
 });
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
+import useSWR from "swr";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import { QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { queryClient } from "./utils/query-client";
 
 async function getTodos() {
   try {
@@ -13,17 +12,24 @@ async function getTodos() {
   }
 }
 
-function HelloWorld() {
-  // Queries
-  const query = useQuery({ queryKey: ["todos"], queryFn: getTodos });
+function Todos() {
+  const { data, error, isLoading } = useSWR("todos", getTodos);
 
-  if (!query.data) {
+  if (!data) {
     return null;
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
     <ul>
-      {query.data.map((todo: string) => (
+      {data.map((todo: string) => (
         <li key={todo}>{todo}</li>
       ))}
     </ul>
@@ -34,31 +40,29 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <HelloWorld />
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src="/vite.svg" className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://reactjs.org" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
+    <div className="App">
+      <Todos />
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src="/vite.svg" className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://reactjs.org" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-    </QueryClientProvider>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </div>
   );
 }
 
