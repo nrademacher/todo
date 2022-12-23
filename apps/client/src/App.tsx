@@ -1,7 +1,5 @@
-import { useState } from "react";
-import useSWR from "swr";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+import useSWR, { useSWRConfig } from "swr";
+import useSWRMutation from "swr/mutation";
 
 async function getTodos() {
   try {
@@ -21,8 +19,29 @@ async function getUsers() {
   }
 }
 
+async function createUser(arg) {
+  fetch("http://localhost:3004/users", {
+    method: "POST",
+    body: JSON.stringify(arg),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
+}
+
+async function createTodo(arg) {
+  await fetch("http://localhost:3004/todos", {
+    method: "POST",
+    body: JSON.stringify(arg),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+}
+
 function Todos() {
-  const { data, error, isLoading } = useSWR("todos", getTodos);
+  const { data, error, isLoading } = useSWR("todos", getTodos, );
+  const { mutate } = useSWRConfig()
 
   if (!data) {
     return null;
@@ -37,16 +56,36 @@ function Todos() {
   }
 
   return (
-    <ul>
-      {data.map((todo: string) => (
-        <li key={todo}>{todo}</li>
-      ))}
-    </ul>
+    <>
+      <ul>
+        {data.map((todo, i) => <li key={i}>{todo.description}</li>)}
+      </ul>
+      <button
+        onClick={async () => {
+          try {
+            const newTodo = {
+              description: "Buy coffee",
+            };
+            await createTodo(newTodo);
+            mutate("todos", [...data, newTodo]);
+          } catch (e) {
+            // error handling
+            throw e;
+          }
+        }}
+      >
+        Create todo
+      </button>
+    </>
   );
 }
 
 function Users() {
   const { data, error, isLoading } = useSWR("users", getUsers);
+  const { trigger, isMutating } = useSWRMutation(
+    "http://localhost:3004/users",
+    createUser,
+  );
 
   if (!data) {
     return null;
@@ -61,41 +100,36 @@ function Users() {
   }
 
   return (
-    <ul>
-      {data.map((user: any) => (
-        <li key={user.id}>{user.email}</li>
-      ))}
-    </ul>
+    <>
+      <ul>
+        {data.map((user: any) => <li key={user.id}>{user.firstName}</li>)}
+      </ul>
+      <button
+        disabled={isMutating}
+        onClick={async () => {
+          try {
+            await trigger({
+              firstName: "john",
+              lastName: "doe",
+              email: "john@doe.com",
+            });
+          } catch (e) {
+            // error handling
+            throw e;
+          }
+        }}
+      >
+        Create user
+      </button>
+    </>
   );
 }
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
+    <div>
       <Todos />
       <Users />
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   );
 }
