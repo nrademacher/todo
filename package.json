@@ -6,6 +6,7 @@
   "scripts": {
     "server:dev": "pnpm --filter server dev",
     "client:dev": "pnpm --filter client dev",
+    "db:drop": "pnpm --filter server db:drop",
     "dev": "concurrently \"pnpm server:dev\" \"pnpm client:dev\"",
     "format": "pnpm -r format"
   },

@@ -3,7 +3,7 @@ import { User } from "./user.entity";
 
 @Entity()
 export class Todo {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("increment")
   id: number;
 
   @Column()

@@ -15,7 +15,7 @@ todoRouter.post("/", async function (req: Request, res: Response) {
   await TodoController.createTodo(req.body, res);
 });
 
-todoRouter.put("/:id", async function (req: Request, res: Response) {
+todoRouter.patch("/:id", async function (req: Request, res: Response) {
   await TodoController.updateTodo(Number(req.params.id), req.body, res);
 });
 

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "export PORT=3004 && nodemon src/app.ts",
+    "db:drop": "pnpm typeorm-ts-node-esm schema:drop -d ./src/database/data-source.ts",
     "format": "prettier --ignore-path .gitignore \"**/*.+(ts|js|json)\" --write --list-different"
   },
   "keywords": [],

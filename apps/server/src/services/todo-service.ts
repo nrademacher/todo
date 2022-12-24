@@ -16,20 +16,20 @@ export class TodoService {
   }
 
   public static async createTodo(
-    input: TodoParams,
+    params: TodoParams,
   ): Promise<Todo> {
-    const todo = dataSource.getRepository(Todo).create(input);
+    const todo = dataSource.getRepository(Todo).create(params);
     return await dataSource.getRepository(Todo).save(todo);
   }
 
   public static async updateTodo(
     id: TodoId,
-    input: TodoParams,
+    params: TodoParams,
   ): Promise<Todo> {
     const todo = await dataSource.getRepository(Todo).findOneBy({
       id,
     });
-    dataSource.getRepository(Todo).merge(todo, input);
+    dataSource.getRepository(Todo).merge(todo, params);
     return await dataSource.getRepository(Todo).save(todo);
   }
 
