@@ -11,7 +11,7 @@ export const TodoForm: React.FC = () => {
         description: todoDescription,
       };
       setTodoDescription("");
-      await add.mutateAsync(newTodoParams);
+      await add(newTodoParams);
     } catch (e) {
       // error handling
       throw e;
