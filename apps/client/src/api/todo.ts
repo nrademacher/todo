@@ -1,6 +1,7 @@
 import type { User } from "./user";
 import { API_URL } from "../constants";
 import axios from "axios";
+
 import { setAuthorization } from "./utils";
 
 const TODO_ROUTE_NAME = "todos";
