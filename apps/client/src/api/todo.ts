@@ -1,5 +1,6 @@
 import type { User } from "./user";
 import { API_URL } from "../constants";
+import { setAuthorization } from "./utils";
 
 const TODO_ROUTE_NAME = "todos";
 
@@ -11,8 +12,11 @@ export type Todo = {
 };
 
 export async function getTodos(): Promise<Todo[] | undefined> {
+  const authorization = setAuthorization();
   try {
-    const res = await fetch(`${API_URL}/${TODO_ROUTE_NAME}`);
+    const res = await fetch(`${API_URL}/${TODO_ROUTE_NAME}`, {
+      headers: authorization,
+    });
     return await res.json();
   } catch (e) {
     console.error(e);

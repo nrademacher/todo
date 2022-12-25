@@ -3,7 +3,7 @@ import { useTodos } from "../hooks";
 
 export const TodoForm: React.FC = () => {
   const [todoDescription, setTodoDescription] = useState("");
-  const { todos, error, isLoading, add } = useTodos();
+  const { error, isLoading, add } = useTodos();
 
   async function handleCreate() {
     try {
@@ -11,14 +11,11 @@ export const TodoForm: React.FC = () => {
         description: todoDescription,
       };
       setTodoDescription("");
-      await add.mutateAsync(newTodoParams);
+      await add(newTodoParams);
     } catch (e) {
       // error handling
       throw e;
     }
-  }
-  if (!todos) {
-    return null;
   }
 
   if (error) {

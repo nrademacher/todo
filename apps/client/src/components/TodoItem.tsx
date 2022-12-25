@@ -1,5 +1,5 @@
+import type { Todo, TodoId } from "../api";
 import { useTodos } from "../hooks";
-import { Todo, type TodoId } from "../api";
 
 export const TodoItem: React.FC<{ localId: string; todo: Todo }> = (
   { localId, todo },
@@ -11,7 +11,7 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = (
       const updateTodoParams = {
         done: checked,
       };
-      await update.mutateAsync({ id: todoId, payload: updateTodoParams });
+      await update({ id: todoId, payload: updateTodoParams });
     } catch (e) {
       // @TODO: error handling
       throw e;
@@ -20,7 +20,7 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = (
 
   async function handleDelete(todoId: TodoId) {
     try {
-      await remove.mutateAsync(todoId);
+      await remove(todoId);
     } catch (e) {
       // @TODO: error handling
       throw e;
@@ -38,7 +38,6 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = (
           await handleCheckedChange(todo.id, e.target.checked)}
       />
       <button
-        disabled={remove.status === "loading"}
         onClick={async () => await handleDelete(todo.id)}
       >
         Delete
