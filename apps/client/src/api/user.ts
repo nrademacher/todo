@@ -1,6 +1,7 @@
 import type { Todo } from "./todo";
 import { setAuthorization } from "./utils";
 import { API_URL } from "../constants";
+import axios from "axios";
 
 export type User = {
   id: string;
@@ -13,54 +14,24 @@ export type User = {
 const USER_ROUTE_NAME = "users";
 
 export async function getUsers(): Promise<User[] | null> {
-  const authorization = setAuthorization();
-  let result
-  try {
-    const res = await fetch(`${API_URL}/${USER_ROUTE_NAME}`, {
-      headers: authorization,
-    });
-    result = await res.json();
-  } catch (e) {
-    console.error(e);
-  }
-  if (!result) {
-    return null;
-  }
-  return result;
+  const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}`, {
+    headers: setAuthorization(),
+  });
+  return res.data;
 }
 
 export async function getCurrentUser(): Promise<User | null> {
-  const authorization = setAuthorization();
-  let result;
-  try {
-    const res = await fetch(`${API_URL}/${USER_ROUTE_NAME}/current`, {
-      headers: authorization,
-    });
-    result = await res.json();
-  } catch (e) {
-    console.error(e);
-  }
-  if (!result) {
-    return null;
-  }
-  return result;
+  const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}/current`, {
+    headers: setAuthorization(),
+  });
+  return res.data;
 }
 
 export async function getUserById(id: User["id"]): Promise<User | null> {
-  const authorization = setAuthorization();
-  let result;
-  try {
-    const res = await fetch(`${API_URL}/${USER_ROUTE_NAME}/${id}`, {
-      headers: authorization,
-    });
-    result = await res.json();
-  } catch (e) {
-    console.error(e);
-  }
-  if (!result) {
-    return null;
-  }
-  return result;
+  const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}/${id}`, {
+    headers: setAuthorization(),
+  });
+  return res.data;
 }
 
 export type CreateUserParams =
@@ -71,16 +42,8 @@ export type UserAuthResponse = { token: string };
 export async function createUser(
   params: CreateUserParams,
 ): Promise<UserAuthResponse | void> {
-  try {
-    const res = await fetch(`${API_URL}/${USER_ROUTE_NAME}`, {
-      method: "POST",
-      body: JSON.stringify(params),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return await res.json();
-  } catch (e) {
-    console.error(e);
-  }
+  const res = await axios.post(`${API_URL}/${USER_ROUTE_NAME}`, params, {
+    headers: setAuthorization(),
+  });
+  return res.data;
 }

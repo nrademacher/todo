@@ -1,5 +1,6 @@
 import type { CreateUserParams, UserAuthResponse } from "./user";
 import { API_URL } from "../constants";
+import axios from "axios";
 
 const AUTH_ROUTE_NAME = "auth";
 
@@ -9,15 +10,12 @@ export async function signInUser(
   params: SignInUserParams,
 ): Promise<UserAuthResponse | void> {
   try {
-    const res = await fetch(`${API_URL}/${AUTH_ROUTE_NAME}/signin`, {
-      method: "POST",
-      body: JSON.stringify(params),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return await res.json();
+    const res = await axios.post(
+      `${API_URL}/${AUTH_ROUTE_NAME}/signin`,
+      params,
+    );
+    return res.data;
   } catch (e) {
-    console.error(e);
+    throw e;
   }
 }

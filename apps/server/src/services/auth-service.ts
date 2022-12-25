@@ -48,6 +48,9 @@ export class AuthService {
     const user = await dataSource.getRepository(User).findOneBy({
       email: params.email,
     });
+    if (!user) {
+      throw new AuthorizationError("Invalid credentials", 403);
+    }
 
     const passwordMatch = await this.isPasswordMatch(
       params.password,

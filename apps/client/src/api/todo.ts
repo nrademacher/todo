@@ -1,5 +1,7 @@
 import type { User } from "./user";
 import { API_URL } from "../constants";
+import axios from "axios";
+
 import { setAuthorization } from "./utils";
 
 const TODO_ROUTE_NAME = "todos";
@@ -12,31 +14,18 @@ export type Todo = {
 };
 
 export async function getTodos(): Promise<Todo[] | undefined> {
-  const authorization = setAuthorization();
-  try {
-    const res = await fetch(`${API_URL}/${TODO_ROUTE_NAME}`, {
-      headers: authorization,
-    });
-    return await res.json();
-  } catch (e) {
-    console.error(e);
-  }
+  const res = await axios.get(`${API_URL}/${TODO_ROUTE_NAME}`, {
+    headers: setAuthorization(),
+  });
+  return res.data;
 }
 
 export type CreateTodoParams = Pick<Todo, "description">;
 
 export async function createTodo(params: CreateTodoParams): Promise<void> {
-  try {
-    await fetch(`${API_URL}/${TODO_ROUTE_NAME}`, {
-      method: "POST",
-      body: JSON.stringify(params),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (e) {
-    console.error(e);
-  }
+  await axios.post(`${API_URL}/${TODO_ROUTE_NAME}`, params, {
+    headers: setAuthorization(),
+  });
 }
 
 export type TodoId = Todo["id"];
@@ -44,12 +33,10 @@ export type TodoId = Todo["id"];
 export async function getTodoById(
   id: TodoId,
 ): Promise<void> {
-  try {
-    const res = await fetch(`${API_URL}/${TODO_ROUTE_NAME}/${id}`);
-    return await res.json();
-  } catch (e) {
-    console.error(e);
-  }
+  const res = await axios.get(`${API_URL}/${TODO_ROUTE_NAME}/${id}`, {
+    headers: setAuthorization(),
+  });
+  return res.data;
 }
 
 export type UpdateTodoParams = Pick<Todo, "id"> & {
@@ -59,27 +46,19 @@ export type UpdateTodoParams = Pick<Todo, "id"> & {
 export async function updateTodo(
   params: UpdateTodoParams,
 ): Promise<void> {
-  try {
-    await fetch(`${API_URL}/${TODO_ROUTE_NAME}/${params.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(params.payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (e) {
-    console.error(e);
-  }
+  await axios.patch(
+    `${API_URL}/${TODO_ROUTE_NAME}/${params.id}`,
+    params.payload,
+    {
+      headers: setAuthorization(),
+    },
+  );
 }
 
 export async function deleteTodo(
   id: TodoId,
 ): Promise<void> {
-  try {
-    await fetch(`${API_URL}/${TODO_ROUTE_NAME}/${id}`, {
-      method: "DELETE",
-    });
-  } catch (e) {
-    console.error(e);
-  }
+  await axios.delete(`${API_URL}/${TODO_ROUTE_NAME}/${id}`, {
+    headers: setAuthorization(),
+  });
 }

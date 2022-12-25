@@ -1,4 +1,4 @@
-import { AuthorizationError, AuthService, SignInUserParams } from "../services";
+import { AuthService, SignInUserParams } from "../services";
 import type { Response } from "express";
 
 export class AuthController {
@@ -10,14 +10,8 @@ export class AuthController {
       const token = await AuthService.signInUser(params);
       res.json({ token });
     } catch (e) {
-      if (e instanceof AuthorizationError) {
-        res.status(e.statusCode);
-        res.json({ message: e.message });
-      } else {
-        console.error(e)
-        res.status(401);
-        res.json({ message: "Not authorized" });
-      }
+      res.status(e.statusCode || 401);
+      res.json({ message: e.message });
     }
   }
 }

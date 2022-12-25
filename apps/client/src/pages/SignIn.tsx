@@ -6,11 +6,15 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn } = useAuth();
+  const { signIn, error } = useAuth();
 
   function resetForm(): void {
     setEmail("");
     setPassword("");
+  }
+
+  if (error) {
+    return <div>Error</div>;
   }
 
   async function handleSignIn(): Promise<void> {
@@ -64,3 +68,4 @@ export function SignIn() {
     </div>
   );
 }
+
