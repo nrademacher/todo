@@ -1,9 +1,6 @@
-import { config } from "dotenv";
 import { DataSource, type DataSourceOptions } from "typeorm";
 import { Init1671750857918 } from "./migrations/1671750857918-Init";
 import { changeFirstname1671751702607 } from "./migrations/1671751702607-change_firstname";
-
-config()
 
 const dataSourceOptions: DataSourceOptions = {
   type: "mysql",

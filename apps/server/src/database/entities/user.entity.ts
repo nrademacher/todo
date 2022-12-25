@@ -15,6 +15,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column()
+  passwordHash: string;
+
   @OneToMany(() => Todo, (todo) => todo.user)
   todos: Todo[];
 }

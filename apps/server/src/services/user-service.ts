@@ -1,8 +1,12 @@
 import { dataSource, User } from "../database";
+import { AuthService } from "./auth-service";
 import type { DeleteResult } from "typeorm";
 
 export type UserId = User["id"];
-export type UserParams = Omit<User, "id">;
+export type CreateUserParams = Omit<User, "id" | "passwordHash"> & {
+  password: string;
+};
+export type UpdateUserParams = Partial<CreateUserParams>;
 
 export class UserService {
   public static async getUsers(): Promise<User[]> {
@@ -15,14 +19,21 @@ export class UserService {
     });
   }
 
-  public static async createUser(params: UserParams): Promise<User> {
-    const user = dataSource.getRepository(User).create(params);
-    return await dataSource.getRepository(User).save(user);
+  public static async createUser(params: CreateUserParams): Promise<string> {
+    const { password, ...userParams } = params;
+    const passwordHash = await AuthService.hashPassword(password);
+    const user = dataSource.getRepository(User).create({
+      ...userParams,
+      passwordHash,
+    });
+    await dataSource.getRepository(User).save(user);
+    const token = AuthService.createUserToken(user);
+    return token;
   }
 
   public static async updateUser(
     id: UserId,
-    params: UserParams,
+    params: UpdateUserParams,
   ): Promise<User> {
     const user = await dataSource.getRepository(User).findOneBy({
       id,

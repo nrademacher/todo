@@ -1,5 +1,5 @@
+import type { Todo, TodoId } from "../api";
 import { useTodos } from "../hooks";
-import { Todo, type TodoId } from "../api";
 
 export const TodoItem: React.FC<{ localId: string; todo: Todo }> = (
   { localId, todo },

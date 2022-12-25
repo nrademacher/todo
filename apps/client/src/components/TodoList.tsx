@@ -21,7 +21,11 @@ export const TodoList: React.FC = () => {
     <ol>
       {todos.map((todo) => {
         const localId = nanoid();
-        return <TodoItem localId={localId} todo={todo} />;
+        return (
+          <li key={localId}>
+            <TodoItem localId={localId} todo={todo} />
+          </li>
+        );
       })}
     </ol>
   );
