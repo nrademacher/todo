@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../hooks";
 import type { CreateUserParams } from "../api";
+import type { AxiosError } from "axios";
 import { Link } from "react-router-dom";
-import { AxiosError } from "axios";
 
 export function SignUp() {
   const [username, setUsername] = useState("");
@@ -18,18 +18,13 @@ export function SignUp() {
   }
 
   async function handleSignUp(): Promise<void> {
-    try {
-      const signUpParams: CreateUserParams = {
-        username,
-        email,
-        password,
-      };
-      await signUp(signUpParams);
-      resetForm();
-    } catch (e) {
-      // @TODO: Error handling
-      console.error(e);
-    }
+    const signUpParams: CreateUserParams = {
+      username,
+      email,
+      password,
+    };
+    await signUp(signUpParams);
+    resetForm();
   }
 
   return (
