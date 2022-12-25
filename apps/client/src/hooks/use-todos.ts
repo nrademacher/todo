@@ -39,10 +39,10 @@ export function useTodos() {
 
   return {
     todos: data,
-    error,
-    isLoading,
-    add,
-    update,
-    remove,
+    error: error || add.error || update.error || remove.error,
+    isLoading: isLoading || add.isLoading || update.isLoading || remove.isLoading,
+    add: add.mutateAsync,
+    update: update.mutateAsync,
+    remove: remove.mutateAsync,
   };
 }

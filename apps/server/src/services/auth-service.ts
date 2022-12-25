@@ -7,6 +7,8 @@ const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
 export type SignInUserParams = Pick<CreateUserParams, "email" | "password">;
 
+export type UserAuthPayload = JwtPayload & Pick<User, "id" | "email">;
+
 export class AuthorizationError extends Error {
   public readonly statusCode: number;
 
@@ -26,9 +28,9 @@ export class AuthService {
     return token;
   }
 
-  public static authorizeUser(token: string): string | JwtPayload {
-    const user = verify(token, JWT_SECRET);
-    return user;
+  public static authorizeUser(token: string): UserAuthPayload {
+    const user = verify(token, JWT_SECRET) as UserAuthPayload;
+    return user as UserAuthPayload;
   }
 
   public static async hashPassword(password: string): Promise<string> {
@@ -46,6 +48,9 @@ export class AuthService {
     const user = await dataSource.getRepository(User).findOneBy({
       email: params.email,
     });
+    if (!user) {
+      throw new AuthorizationError("Invalid credentials", 403);
+    }
 
     const passwordMatch = await this.isPasswordMatch(
       params.password,
