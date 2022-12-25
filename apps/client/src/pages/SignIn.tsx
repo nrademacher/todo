@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { SignInUserParams } from "../api";
@@ -12,10 +13,6 @@ export function SignIn() {
   function resetForm(): void {
     setEmail("");
     setPassword("");
-  }
-
-  if (error) {
-    return <div>Error</div>;
   }
 
   async function handleSignIn(): Promise<void> {
@@ -61,6 +58,9 @@ export function SignIn() {
           Sign in
         </button>
       </form>
+      {error
+        ? <p style={{ color: "red" }}>{(error as AxiosError).response.data.message}</p>
+        : null}
       <Link to="/signup">Sign up</Link>
     </div>
   );

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useAuth } from "../hooks";
 import type { CreateUserParams } from "../api";
+import { Link } from "react-router-dom";
+import { AxiosError } from "axios";
 
 export function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signUp } = useAuth();
+  const { signUp, error } = useAuth();
 
   function resetForm(): void {
     setUsername("");
@@ -72,6 +74,10 @@ export function SignUp() {
           Sign up
         </button>
       </form>
+      {error
+        ? <p style={{ color: "red" }}>{(error as AxiosError).message}</p>
+        : null}
+      <Link to="/auth/signin">Sign in</Link>
     </div>
   );
 }
