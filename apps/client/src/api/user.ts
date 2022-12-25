@@ -5,8 +5,7 @@ import axios from "axios";
 
 export type User = {
   id: string;
-  firstName: string;
-  lastName: string;
+  username: string;
   email: string;
   todos: Todo[];
 };
@@ -35,7 +34,7 @@ export async function getUserById(id: User["id"]): Promise<User | null> {
 }
 
 export type CreateUserParams =
-  & Pick<User, "email" | "firstName" | "lastName">
+  & Pick<User, "email" | "username">
   & { password: string };
 export type UserAuthResponse = { token: string };
 

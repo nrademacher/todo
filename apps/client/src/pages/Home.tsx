@@ -10,7 +10,7 @@ export function Home() {
       {user
         ? (
           <header>
-            <h1>Welcome, {user.firstName}!</h1>
+            <h1>Welcome, {user.username}!</h1>
             <button onClick={() => signOut()}>Sign out</button>
           </header>
         )

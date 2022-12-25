@@ -3,16 +3,14 @@ import { useAuth } from "../hooks";
 import type { CreateUserParams } from "../api";
 
 export function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { signUp } = useAuth();
 
   function resetForm(): void {
-    setFirstName("");
-    setLastName("");
+    setUsername("");
     setEmail("");
     setPassword("");
   }
@@ -20,8 +18,7 @@ export function SignUp() {
   async function handleSignUp(): Promise<void> {
     try {
       const signUpParams: CreateUserParams = {
-        firstName,
-        lastName,
+        username,
         email,
         password,
       };
@@ -43,19 +40,11 @@ export function SignUp() {
         }}
       >
         <div>
-          <label htmlFor="first-name-input">First Name</label>
+          <label htmlFor="username-input">Username</label>
           <input
-            id="first-name-input"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="last-name-input">Last Name</label>
-          <input
-            id="last-name-input"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            id="username-input"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
@@ -78,7 +67,7 @@ export function SignUp() {
         </div>
         <button
           type="submit"
-          disabled={!firstName || !lastName || !email || !password}
+          disabled={!username || !email || !password}
         >
           Sign up
         </button>

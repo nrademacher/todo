@@ -11,6 +11,7 @@ export function useAuth() {
   function handleSignInSuccess(data: UserAuthResponse): void {
     const { token } = data;
     Cookies.set(AUTH_TOKEN_NAME, token);
+    queryClient.invalidateQueries({ queryKey: ["todos"] });
     navigate("/");
   }
 

@@ -3,8 +3,8 @@ import { TodoController } from "../controllers";
 
 const todoRouter = Router();
 
-todoRouter.get("/", async (_req: Request, res: Response) => {
-  await TodoController.getTodos(res);
+todoRouter.get("/", async (req: Request, res: Response) => {
+  await TodoController.getTodos(req.user.id, res);
 });
 
 todoRouter.get("/:id", async (req: Request, res: Response) => {
@@ -12,7 +12,7 @@ todoRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 todoRouter.post("/", async (req: Request, res: Response) => {
-  await TodoController.createTodo(req.body, res);
+  await TodoController.createTodo(req.body, req.user.id, res);
 });
 
 todoRouter.patch("/:id", async (req: Request, res: Response) => {

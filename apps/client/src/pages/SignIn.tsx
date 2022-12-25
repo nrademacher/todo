@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { SignInUserParams } from "../api";
 import { useAuth } from "../hooks";
 
@@ -18,17 +19,12 @@ export function SignIn() {
   }
 
   async function handleSignIn(): Promise<void> {
-    try {
-      const signUpParams: SignInUserParams = {
-        email,
-        password,
-      };
-      await signIn(signUpParams);
-      resetForm();
-    } catch (e) {
-      // @TODO: Error handling
-      console.error(e);
-    }
+    const signUpParams: SignInUserParams = {
+      email,
+      password,
+    };
+    await signIn(signUpParams);
+    resetForm();
   }
 
   return (
@@ -62,10 +58,10 @@ export function SignIn() {
           type="submit"
           disabled={!email || !password}
         >
-          Sign up
+          Sign in
         </button>
       </form>
+      <Link to="/signup">Sign up</Link>
     </div>
   );
 }
-

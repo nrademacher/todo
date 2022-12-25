@@ -10,12 +10,21 @@ export type UpdateUserParams = Partial<CreateUserParams>;
 
 export class UserService {
   public static async getUsers(): Promise<User[]> {
-    return await dataSource.getRepository(User).find();
+    return await dataSource.getRepository(User).find({
+      relations: {
+        todos: true,
+      },
+    });
   }
 
   public static async getUserById(id: UserId): Promise<User> {
-    return await dataSource.getRepository(User).findOneBy({
-      id,
+    return await dataSource.getRepository(User).findOne({
+      relations: {
+        todos: true,
+      },
+      where: {
+        id,
+      },
     });
   }
 

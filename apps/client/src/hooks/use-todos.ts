@@ -13,34 +13,32 @@ export function useTodos() {
     queryFn: getTodos,
   });
 
+  function onMutationSuccess(): void {
+    queryClient.invalidateQueries({ queryKey: ["todos"] });
+  }
+
   const add = useMutation({
     mutationFn: createTodo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
+    onSuccess: onMutationSuccess,
   });
 
   const update = useMutation({
     mutationFn: updateTodo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
+    onSuccess: onMutationSuccess,
   });
 
   const remove = useMutation({
     mutationFn: deleteTodo,
     onSuccess: () => {
-      setTimeout(
-        () => queryClient.invalidateQueries({ queryKey: ["todos"] }),
-        500,
-      );
+      setTimeout(onMutationSuccess, 500);
     },
   });
 
   return {
     todos: data,
     error: error || add.error || update.error || remove.error,
-    isLoading: isLoading || add.isLoading || update.isLoading || remove.isLoading,
+    isLoading: isLoading || add.isLoading || update.isLoading ||
+      remove.isLoading,
     add: add.mutateAsync,
     update: update.mutateAsync,
     remove: remove.mutateAsync,

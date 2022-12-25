@@ -1,11 +1,12 @@
-import { useTodos } from "../hooks";
+import { useCurrentUser, useTodos } from "../hooks";
 import { nanoid } from "nanoid";
 import { TodoItem } from "./TodoItem";
 
 export const TodoList: React.FC = () => {
+  const { user } = useCurrentUser();
   const { todos, error, isLoading } = useTodos();
 
-  if (!todos) {
+  if (!todos || !user) {
     return null;
   }
 
