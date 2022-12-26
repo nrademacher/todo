@@ -7,7 +7,7 @@ import {
 import { TodoController } from "../controllers";
 import { ServerError } from "../utils";
 import { body, param } from "express-validator";
-import { validate } from "../middlewares";
+import { handleError, validate } from "../middlewares";
 
 const todoRouter = Router();
 
@@ -74,5 +74,7 @@ todoRouter.delete(
     }
   },
 );
+
+todoRouter.use(handleError);
 
 export { todoRouter };

@@ -7,7 +7,7 @@ import {
 import { UserController } from "../controllers";
 import { ServerError } from "../utils";
 import { body, param } from "express-validator";
-import { protect, validate } from "../middlewares";
+import { handleError, protect, validate } from "../middlewares";
 
 const userRouter = Router();
 
@@ -99,5 +99,7 @@ userRouter.delete("/:id", [
     next(new ServerError(error.message));
   }
 });
+
+userRouter.use(handleError);
 
 export { userRouter };

@@ -1,5 +1,6 @@
 import { NextFunction, type Request, type Response, Router } from "express";
 import { AuthController } from "../controllers";
+import { handleError } from "../middlewares";
 import { ServerError, ServerErrorTypes } from "../utils";
 
 const authRouter = Router();
@@ -14,5 +15,7 @@ authRouter.post(
     }
   },
 );
+
+authRouter.use(handleError);
 
 export { authRouter };
