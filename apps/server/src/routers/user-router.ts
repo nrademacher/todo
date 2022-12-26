@@ -1,10 +1,16 @@
 import { type Request, type Response, Router } from "express";
+import { body } from "express-validator";
 import { UserController } from "../controllers";
-import { protect } from "../middlewares";
+import { protect, validate } from "../middlewares";
 
 const userRouter = Router();
 
-userRouter.post("/", async (req: Request, res: Response) => {
+userRouter.post("/", [
+  body("username").isString(),
+  body("password").isStrongPassword(),
+  body("email").isEmail(),
+  validate,
+], async (req: Request, res: Response) => {
   await UserController.createUser(req.body, res);
 });
 
@@ -20,10 +26,19 @@ userRouter.get("/:id", protect, async (req: Request, res: Response) => {
   await UserController.getUserById(req.params.id, res);
 });
 
-
-userRouter.put("/:id", protect, async (req: Request, res: Response) => {
-  await UserController.updateUser(req.params.id, req.body, res);
-});
+userRouter.patch(
+  "/:id",
+  [
+    body("username").isString().optional(),
+    body("password").isStrongPassword().optional(),
+    body("email").isEmail().optional(),
+    validate,
+  ],
+  protect,
+  async (req: Request, res: Response) => {
+    await UserController.updateUser(req.params.id, req.body, res);
+  },
+);
 
 userRouter.delete("/:id", protect, async (req: Request, res: Response) => {
   await UserController.deleteUser(req.params.id, res);

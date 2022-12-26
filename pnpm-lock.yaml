@@ -51,11 +51,13 @@ importers:
       '@types/jsonwebtoken': ^9.0.0
       '@types/morgan': ^1.9.3
       '@types/node': ^18.11.17
+      '@types/validator': ^13.7.10
       bcryptjs: ^2.4.3
       cors: ^2.8.5
       cuid: ^2.1.8
       dotenv: ^16.0.3
       express: ^4.18.2
+      express-validator: ^6.14.2
       jsonwebtoken: ^9.0.0
       morgan: ^1.10.0
       mysql2: ^2.3.3
@@ -71,6 +73,7 @@ importers:
       cuid: 2.1.8
       dotenv: 16.0.3
       express: 4.18.2
+      express-validator: 6.14.2
       jsonwebtoken: 9.0.0
       morgan: 1.10.0
       mysql2: 2.3.3
@@ -83,6 +86,7 @@ importers:
       '@types/jsonwebtoken': 9.0.0
       '@types/morgan': 1.9.3
       '@types/node': 18.11.17
+      '@types/validator': 13.7.10
       nodemon: 2.0.20
       prettier: 2.8.1
       ts-node: 10.9.1_moeqx3xmzxqxagf2sz6mqkbb7m
@@ -717,6 +721,10 @@ packages:
       '@types/node': 18.11.17
     dev: true
 
+  /@types/validator/13.7.10:
+    resolution: {integrity: sha512-t1yxFAR2n0+VO6hd/FJ9F2uezAZVWHLmpmlJzm1eX03+H7+HsuTAp7L8QJs+2pQCfWkP1+EXsGK9Z9v7o/qPVQ==}
+    dev: true
+
   /@vitejs/plugin-react/3.0.0_vite@4.0.2:
     resolution: {integrity: sha512-1mvyPc0xYW5G8CHQvJIJXLoMjl5Ct3q2g5Y2s6Ccfgwm45y48LBvsla7az+GkkAtYikWQ4Lxqcsq5RHLcZgtNQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -1191,6 +1199,14 @@ packages:
   /etag/1.8.1:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /express-validator/6.14.2:
+    resolution: {integrity: sha512-8XfAUrQ6Y7dIIuy9KcUPCfG/uCbvREctrxf5EeeME+ulanJ4iiW71lWmm9r4YcKKYOCBMan0WpVg7FtHu4Z4Wg==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      lodash: 4.17.21
+      validator: 13.7.0
     dev: false
 
   /express/4.18.2:
@@ -2285,6 +2301,11 @@ packages:
 
   /v8-compile-cache-lib/3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
+
+  /validator/13.7.0:
+    resolution: {integrity: sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw==}
+    engines: {node: '>= 0.10'}
+    dev: false
 
   /vary/1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
