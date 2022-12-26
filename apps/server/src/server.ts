@@ -1,7 +1,8 @@
-import { config } from "dotenv";
-config();
+import * as dotenv from "dotenv";
+dotenv.config();
+import { config } from './configs'
 
-import express, { Request, Response } from "express";
+import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { appRouter } from "./routers";
@@ -20,8 +21,6 @@ app.use("/", appRouter);
 
 app.use(handleError);
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(config.port, () => {
+  console.log(`Server is running on port ${config.port}`);
 });
