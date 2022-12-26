@@ -3,7 +3,8 @@ import type { DeleteResult } from "typeorm";
 import { UserId } from "./user-service";
 
 export type TodoId = Todo["id"];
-export type TodoParams = Omit<Todo, "id">;
+export type CreateTodoParams = Omit<Todo, "id">;
+export type UpdateTodoParams = Omit<Todo, "id" | "user">;
 
 export class TodoService {
   public static async getTodos(userId: UserId): Promise<Todo[]> {
@@ -30,7 +31,7 @@ export class TodoService {
 
   public static async createTodo(
     userId: UserId,
-    params: TodoParams,
+    params: CreateTodoParams,
   ): Promise<Todo> {
     const user = await dataSource.getRepository(User).findOneBy({ id: userId });
     const todo = dataSource.getRepository(Todo).create({ ...params, user });
@@ -39,7 +40,7 @@ export class TodoService {
 
   public static async updateTodo(
     id: TodoId,
-    params: TodoParams,
+    params: UpdateTodoParams,
   ): Promise<Todo> {
     const todo = await dataSource.getRepository(Todo).findOne({
       relations: {

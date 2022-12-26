@@ -10,6 +10,7 @@ export type SignInUserParams = Pick<CreateUserParams, "email" | "password">;
 export type UserAuthPayload = JwtPayload & Pick<User, "id" | "email">;
 
 export class AuthorizationError extends Error {
+  public readonly name = "AuthorizationError";
   public readonly statusCode: number;
 
   constructor(message: string, statusCode: number) {

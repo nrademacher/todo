@@ -30,16 +30,29 @@ export class UserController {
   }
 
   public static async updateUser(
+    reqId: UserId,
     id: UserId,
     params: UpdateUserParams,
     res: Response,
   ): Promise<void> {
+    if (reqId !== id) {
+      res.sendStatus(403);
+      return;
+    }
     const user = await UserService.updateUser(id, params);
     delete user.passwordHash;
     res.send(user);
   }
 
-  public static async deleteUser(id: UserId, res: Response): Promise<void> {
+  public static async deleteUser(
+    reqId: UserId,
+    id: UserId,
+    res: Response,
+  ): Promise<void> {
+    if (reqId !== id) {
+      res.sendStatus(403);
+      return;
+    }
     const result = UserService.deleteUser(id);
     res.send(result);
   }

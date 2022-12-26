@@ -1,5 +1,11 @@
 import type { Response } from "express";
-import { type TodoId, type TodoParams, TodoService, UserId } from "../services";
+import {
+  type CreateTodoParams,
+  type TodoId,
+  TodoService,
+  type UpdateTodoParams,
+  UserId,
+} from "../services";
 
 export class TodoController {
   public static async getTodos(userId: UserId, res: Response): Promise<void> {
@@ -13,7 +19,7 @@ export class TodoController {
   }
 
   public static async createTodo(
-    params: TodoParams,
+    params: CreateTodoParams,
     userId: UserId,
     res: Response,
   ): Promise<void> {
@@ -23,7 +29,7 @@ export class TodoController {
 
   public static async updateTodo(
     id: TodoId,
-    params: TodoParams,
+    params: UpdateTodoParams,
     res: Response,
   ): Promise<void> {
     const todo = await TodoService.updateTodo(id, params);

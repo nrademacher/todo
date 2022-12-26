@@ -4,10 +4,10 @@ import { authRouter } from "./auth-router";
 import { todoRouter } from "./todo-router";
 import { userRouter } from "./user-router";
 
-const appRouter = Router()
+const appRouter = Router();
 
-appRouter.use('/auth', authRouter)
-appRouter.use('/users', userRouter)
-appRouter.use('/todos', protect, todoRouter)
+appRouter.use("/auth", authRouter);
+appRouter.use("/users", userRouter);
+appRouter.use("/todos", protect, todoRouter);
 
-export { appRouter }
+export { appRouter };
