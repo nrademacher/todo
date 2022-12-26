@@ -6,8 +6,8 @@ services:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_DATABASE=todo
-      - MYSQL_ROOT_PASSWORD=mauFJcuf5dhRMQrjj
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     ports:
       - '3306:3306'
     volumes:
