@@ -54,7 +54,6 @@ importers:
       '@types/validator': ^13.7.10
       bcryptjs: ^2.4.3
       cors: ^2.8.5
-      cuid: ^2.1.8
       dotenv: ^16.0.3
       express: ^4.18.2
       express-validator: ^6.14.2
@@ -70,7 +69,6 @@ importers:
     dependencies:
       bcryptjs: 2.4.3
       cors: 2.8.5
-      cuid: 2.1.8
       dotenv: 16.0.3
       express: 4.18.2
       express-validator: 6.14.2
@@ -1059,10 +1057,6 @@ packages:
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
     dev: true
-
-  /cuid/2.1.8:
-    resolution: {integrity: sha512-xiEMER6E7TlTPnDxrM4eRiC6TRgjNX9xzEZ5U/Se2YJKr7Mq4pJn/2XEHjl3STcSh96GmkHPcBXLES8M29wyyg==}
-    dev: false
 
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}

@@ -36,12 +36,12 @@ userRouter.patch(
   ],
   protect,
   async (req: Request, res: Response) => {
-    await UserController.updateUser(req.params.id, req.body, res);
+    await UserController.updateUser(req.user.id, req.params.id, req.body, res);
   },
 );
 
 userRouter.delete("/:id", protect, async (req: Request, res: Response) => {
-  await UserController.deleteUser(req.params.id, res);
+  await UserController.deleteUser(req.user.id, req.params.id, res);
 });
 
 export { userRouter };
