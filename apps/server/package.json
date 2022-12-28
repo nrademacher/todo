@@ -7,7 +7,7 @@
     "dev": "export STAGE=local && nodemon src/server.ts",
     "db:drop": "pnpm typeorm-ts-node-esm schema:drop -d ./src/database/data-source.ts",
     "format": "prettier --ignore-path .gitignore \"**/*.+(ts|js|json)\" --write --list-different",
-    "test:unit": "export STAGE=testing && jest --detectOpenHandles"
+    "test": "export STAGE=testing && jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

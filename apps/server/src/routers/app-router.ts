@@ -7,7 +7,7 @@ import { userRouter } from "./user-router";
 const appRouter = Router();
 
 appRouter.use("/auth", authRouter);
-appRouter.use("/users", userRouter);
+appRouter.use("/user", userRouter);
 appRouter.use("/todos", protect, todoRouter);
 
 appRouter.use(handleError);

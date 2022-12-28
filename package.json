@@ -10,7 +10,7 @@
     "dev:client": "pnpm --filter client dev",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
     "format": "pnpm -r format",
-    "test:server": "pnpm --filter server test:unit"
+    "test:server": "pnpm --filter server test"
   },
   "keywords": [],
   "author": "Nikolay Rademacher",

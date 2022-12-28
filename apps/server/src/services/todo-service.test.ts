@@ -13,37 +13,35 @@ describe("TodoService", () => {
   });
 
   it("creates a todo for a given user relation", async () => {
-    await UserService.createUser({
+    const { user } = await UserService.createUser({
       username: "Test",
       password: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const [{ id: userId }] = await UserService.getUsers();
-    const todo = await TodoService.createTodo(userId, {
+    const todo = await TodoService.createTodo(user.id, {
       description: "Lorem ipsum",
       done: false,
     });
     expect(todo).toBeTruthy();
     expect(todo.id).toBeTruthy();
-    expect(todo.user.id).toBe(userId);
+    expect(todo.user.id).toBe(user.id);
   });
 
   it("gets created todos", async () => {
-    await UserService.createUser({
+    const { user } = await UserService.createUser({
       username: "Test",
       password: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const [{ id: userId }] = await UserService.getUsers();
-    const { id: todoOneId } = await TodoService.createTodo(userId, {
+    const { id: todoOneId } = await TodoService.createTodo(user.id, {
       description: "Lorem ipsum",
       done: false,
     });
-    const { id: todoTwoId } = await TodoService.createTodo(userId, {
+    const { id: todoTwoId } = await TodoService.createTodo(user.id, {
       description: "Lorem ipsum",
       done: false,
     });
-    const result = await TodoService.getTodos(userId);
+    const result = await TodoService.getTodos(user.id);
     expect(result.find((todo) => todo.id === todoOneId))
       .toBeTruthy();
     expect(result.find((todo) => todo.id === todoTwoId))
@@ -51,45 +49,42 @@ describe("TodoService", () => {
   });
 
   it("gets a todo by id", async () => {
-    await UserService.createUser({
+    const { user } = await UserService.createUser({
       username: "Test",
       password: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const [{ id: userId }] = await UserService.getUsers();
-    const { id: todoId } = await TodoService.createTodo(userId, {
+    const { id: todoId } = await TodoService.createTodo(user.id, {
       description: "Lorem ipsum",
       done: false,
     });
-    const result = await TodoService.getTodoById(todoId)
-    expect(result.id).toBe(todoId)
-    expect(result.user.id).toBe(userId);
+    const result = await TodoService.getTodoById(todoId);
+    expect(result.id).toBe(todoId);
+    expect(result.user.id).toBe(user.id);
   });
 
   it("updates a todo", async () => {
-    await UserService.createUser({
+    const { user } = await UserService.createUser({
       username: "Test",
       password: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const [{ id: userId }] = await UserService.getUsers();
-    const { id: todoId } = await TodoService.createTodo(userId, {
+    const { id: todoId } = await TodoService.createTodo(user.id, {
       description: "Lorem ipsum",
       done: false,
     });
-    await TodoService.updateTodo(todoId, { done: true })
-    const result = await TodoService.getTodoById(todoId)
+    await TodoService.updateTodo(todoId, { done: true });
+    const result = await TodoService.getTodoById(todoId);
     expect(result.done).toBe(true);
   });
 
   it("deletes a todo", async () => {
-    await UserService.createUser({
+    const { user } = await UserService.createUser({
       username: "Test",
       password: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const [{ id: userId }] = await UserService.getUsers();
-    const { id: todoId } = await TodoService.createTodo(userId, {
+    const { id: todoId } = await TodoService.createTodo(user.id, {
       description: "Lorem ipsum",
       done: false,
     });

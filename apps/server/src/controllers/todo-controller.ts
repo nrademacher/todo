@@ -22,6 +22,10 @@ export class TodoController {
     res: Response,
   ): Promise<void> {
     const todo = await TodoService.getTodoById(id);
+    if (!todo) {
+      res.sendStatus(404);
+      return;
+    }
     if (reqId !== todo.user.id) {
       res.sendStatus(403);
       return;
@@ -45,6 +49,10 @@ export class TodoController {
     res: Response,
   ): Promise<void> {
     const todo = await TodoService.getTodoById(id);
+    if (!todo) {
+      res.sendStatus(404);
+      return;
+    }
     if (reqId !== todo.user.id) {
       res.sendStatus(403);
       return;
@@ -53,8 +61,16 @@ export class TodoController {
     res.send(updatedTodo);
   }
 
-  public static async deleteTodo(reqId: UserId, id: TodoId, res: Response): Promise<void> {
+  public static async deleteTodo(
+    reqId: UserId,
+    id: TodoId,
+    res: Response,
+  ): Promise<void> {
     const todo = await TodoService.getTodoById(id);
+    if (!todo) {
+      res.sendStatus(404);
+      return;
+    }
     if (reqId !== todo.user.id) {
       res.sendStatus(403);
       return;
