@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useAuth } from "../hooks";
 import type { CreateUserParams } from "../api";
 import type { AxiosError } from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signUp, error } = useAuth();
+  const { signUp, isSignedIn, error } = useAuth();
 
   function resetForm(): void {
     setUsername("");
@@ -25,6 +25,10 @@ export function SignUp() {
     };
     await signUp(signUpParams);
     resetForm();
+  }
+
+  if (isSignedIn) {
+    return <Navigate to="/" replace />;
   }
 
   return (

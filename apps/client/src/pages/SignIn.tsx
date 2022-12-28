@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { SignInUserParams } from "../api";
 import { useAuth } from "../hooks";
 
@@ -8,7 +8,7 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn, error } = useAuth();
+  const { isSignedIn, signIn, error } = useAuth();
 
   function resetForm(): void {
     setEmail("");
@@ -22,6 +22,10 @@ export function SignIn() {
     };
     await signIn(signUpParams);
     resetForm();
+  }
+
+  if (isSignedIn) {
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -59,7 +63,11 @@ export function SignIn() {
         </button>
       </form>
       {error
-        ? <p style={{ color: "red" }}>{(error as AxiosError).response.data.message}</p>
+        ? (
+          <p style={{ color: "red" }}>
+            {(error as AxiosError).response.data.message}
+          </p>
+        )
         : null}
       <Link to="/signup">Sign up</Link>
     </div>
