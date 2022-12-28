@@ -10,7 +10,7 @@ export type User = {
   todos: Todo[];
 };
 
-const USER_ROUTE_NAME = "users";
+const USER_ROUTE_NAME = "user";
 
 export async function getUsers(): Promise<User[] | null> {
   const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}`, {
@@ -20,14 +20,7 @@ export async function getUsers(): Promise<User[] | null> {
 }
 
 export async function getCurrentUser(): Promise<User | null> {
-  const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}/current`, {
-    headers: setAuthorization(),
-  });
-  return res.data;
-}
-
-export async function getUserById(id: User["id"]): Promise<User | null> {
-  const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}/${id}`, {
+  const res = await axios.get(`${API_URL}/${USER_ROUTE_NAME}`, {
     headers: setAuthorization(),
   });
   return res.data;
