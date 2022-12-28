@@ -9,10 +9,25 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     ports:
+      - '3306:3306'
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  test-db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
       - '3307:3306'
     volumes:
       - test-db:/var/lib/mysql
       - ./test-db/init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
+  db:
+    driver: local
   test-db:
     driver: local
