@@ -1,3 +1,4 @@
+import type { DeepPartial } from "typeorm";
 import merge from "lodash.merge";
 
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
@@ -11,6 +12,7 @@ type Config = {
   secrets: {
     jwt: string;
     db: {
+      port: number,
       host: string;
       name: string;
       password: string;
@@ -18,7 +20,7 @@ type Config = {
   };
 };
 
-export type EnvConfig = Partial<Config>
+export type EnvConfig = DeepPartial<Config>
 
 const baseConfig: Config = {
   stage,
@@ -27,6 +29,7 @@ const baseConfig: Config = {
   secrets: {
     jwt: process.env.JWT_SECRET,
     db: {
+      port: 3306,
       host: process.env.DB_HOST,
       name: process.env.DB_NAME,
       password: process.env.DB_PASSWORD,

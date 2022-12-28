@@ -1,10 +1,10 @@
 import { dataSource, Todo, User } from "../database";
+import type { UserId } from "./user-service";
 import type { DeleteResult } from "typeorm";
-import { UserId } from "./user-service";
 
 export type TodoId = Todo["id"];
-export type CreateTodoParams = Omit<Todo, "id">;
-export type UpdateTodoParams = Omit<Todo, "id" | "user">;
+export type CreateTodoParams = Omit<Todo, "id" | "user">;
+export type UpdateTodoParams = Partial<CreateTodoParams>
 
 export class TodoService {
   public static async getTodos(userId: UserId): Promise<Todo[]> {
@@ -20,7 +20,7 @@ export class TodoService {
     });
   }
 
-  public static async getTodoById(id: TodoId): Promise<Todo> {
+  public static async getTodoById(id: TodoId): Promise<Todo | null> {
     return await dataSource.getRepository(Todo).findOne({
       relations: {
         user: true,
@@ -41,7 +41,7 @@ export class TodoService {
   public static async updateTodo(
     id: TodoId,
     params: UpdateTodoParams,
-  ): Promise<Todo> {
+  ): Promise<Todo | null> {
     const todo = await dataSource.getRepository(Todo).findOne({
       relations: {
         user: true,
@@ -50,6 +50,7 @@ export class TodoService {
         id,
       },
     });
+    if (!todo) return null
     dataSource.getRepository(Todo).merge(todo, params);
     return await dataSource.getRepository(Todo).save(todo);
   }
