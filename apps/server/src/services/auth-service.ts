@@ -2,8 +2,7 @@ import { dataSource, User } from "../database";
 import { type JwtPayload, sign, verify } from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
 import type { CreateUserParams } from "./user-service";
-
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
+import { config } from "../configs";
 
 export type SignInUserParams = Pick<CreateUserParams, "email" | "password">;
 
@@ -24,13 +23,13 @@ export class AuthService {
   public static createUserToken(user: User): string {
     const token = sign(
       { id: user.id, email: user.email },
-      JWT_SECRET,
+      config.secrets.jwt,
     );
     return token;
   }
 
   public static authorizeUser(token: string): UserAuthPayload {
-    const user = verify(token, JWT_SECRET) as UserAuthPayload;
+    const user = verify(token, config.secrets.jwt) as UserAuthPayload;
     return user;
   }
 
