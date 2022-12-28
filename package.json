@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server:dev": "pnpm --filter server dev",
-    "client:dev": "pnpm --filter client dev",
+    "db:up": "docker compose -f docker-compose.development.yaml -f docker-compose.testing.yaml up -d",
     "db:drop": "pnpm --filter server db:drop",
-    "dev": "concurrently \"pnpm server:dev\" \"pnpm client:dev\"",
-    "format": "pnpm -r format"
+    "dev:server": "pnpm --filter server dev",
+    "dev:client": "pnpm --filter client dev",
+    "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
+    "format": "pnpm -r format",
+    "test:server": "pnpm --filter server test"
   },
   "keywords": [],
   "author": "Nikolay Rademacher",

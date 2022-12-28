@@ -23,7 +23,7 @@ todoRouter.get(
   "/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.getTodoById(Number(req.params.id), res);
+      await TodoController.getTodoById(req.user.id, Number(req.params.id), res);
     } catch (error) {
       next(new ServerError(error.message));
     }
@@ -34,7 +34,7 @@ todoRouter.post(
   "/",
   [
     body("done").toBoolean().exists(),
-    body("description").isString().exists(),
+    body("description").isString().isLength({ min: 1 }).exists(),
     validate,
   ],
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,12 +51,17 @@ todoRouter.patch(
   [
     param("id").toInt().exists(),
     body("done").toBoolean().optional(),
-    body("description").isString().optional(),
+    body("description").isString().isLength({ min: 1 }).optional(),
     validate,
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.updateTodo(Number(req.params.id), req.body, res);
+      await TodoController.updateTodo(
+        req.user.id,
+        Number(req.params.id),
+        req.body,
+        res,
+      );
     } catch (error) {
       next(new ServerError(error.message));
     }
@@ -68,7 +73,7 @@ todoRouter.delete(
   [param("id").toInt(), validate],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.deleteTodo(Number(req.params.id), res);
+      await TodoController.deleteTodo(req.user.id, Number(req.params.id), res);
     } catch (error) {
       next(new ServerError(error.message));
     }

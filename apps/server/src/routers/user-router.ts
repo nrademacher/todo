@@ -6,7 +6,7 @@ import {
 } from "express";
 import { UserController } from "../controllers";
 import { ServerError } from "../utils";
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 import { handleError, protect, validate } from "../middlewares";
 
 const userRouter = Router();
@@ -19,56 +19,27 @@ userRouter.post("/", [
 ], async (req: Request, res: Response, next: NextFunction) => {
   try {
     await UserController.createUser(req.body, res);
-  } catch (error) {
-    next(new ServerError(error.message));
+  } catch (err) {
+    next(new ServerError(err.message));
   }
 });
 
 userRouter.get(
   "/",
   protect,
-  async (_req: Request, res: Response, next: NextFunction) => {
-    try {
-      await UserController.getUsers(res);
-    } catch (error) {
-      next(new ServerError(error.message));
-    }
-  },
-);
-
-userRouter.get(
-  "/current",
-  protect,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await UserController.getUserById(req.user.id, res);
-    } catch (error) {
-      next(new ServerError(error.message));
-    }
-  },
-);
-
-userRouter.get(
-  "/:id",
-  [
-    protect,
-    param("id").isString().exists(),
-    validate,
-  ],
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await UserController.getUserById(req.params.id, res);
-    } catch (error) {
-      next(new ServerError(error.message));
+    } catch (err) {
+      next(new ServerError(err.message));
     }
   },
 );
 
 userRouter.patch(
-  "/:id",
+  "/",
   [
     protect,
-    param("id").isString().exists(),
     body("username").isString().optional(),
     body("password").isStrongPassword().optional(),
     body("email").isEmail().optional(),
@@ -78,27 +49,26 @@ userRouter.patch(
     try {
       await UserController.updateUser(
         req.user.id,
-        req.params.id,
         req.body,
         res,
       );
-    } catch (error) {
-      next(new ServerError(error.message));
+    } catch (err) {
+      next(new ServerError(err.message));
     }
   },
 );
 
-userRouter.delete("/:id", [
+userRouter.delete(
+  "/",
   protect,
-  param("id").isString().exists(),
-  validate,
-], async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await UserController.deleteUser(req.user.id, req.params.id, res);
-  } catch (error) {
-    next(new ServerError(error.message));
-  }
-});
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await UserController.deleteUser(req.user.id, res);
+    } catch (err) {
+      next(new ServerError(err.message));
+    }
+  },
+);
 
 userRouter.use(handleError);
 

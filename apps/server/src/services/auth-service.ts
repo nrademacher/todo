@@ -31,7 +31,7 @@ export class AuthService {
 
   public static authorizeUser(token: string): UserAuthPayload {
     const user = verify(token, JWT_SECRET) as UserAuthPayload;
-    return user as UserAuthPayload;
+    return user;
   }
 
   public static async hashPassword(password: string): Promise<string> {

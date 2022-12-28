@@ -3,21 +3,14 @@ import { AuthService } from "./auth-service";
 import type { DeleteResult } from "typeorm";
 
 export type UserId = User["id"];
-export type CreateUserParams = Omit<User, "id" | "passwordHash"> & {
+export type CreateUserParams = Pick<User, "username" | "email"> & {
   password: string;
 };
-export type UpdateUserParams = Partial<CreateUserParams>;
+export type UpdateUserParams = Partial<CreateUserParams & Pick<User, "todos">>;
+export type CreateUserResponse = { user: User; token: string };
 
 export class UserService {
-  public static async getUsers(): Promise<User[]> {
-    return await dataSource.getRepository(User).find({
-      relations: {
-        todos: true,
-      },
-    });
-  }
-
-  public static async getUserById(id: UserId): Promise<User> {
+  public static async getUserById(id: UserId): Promise<User | null> {
     return await dataSource.getRepository(User).findOne({
       relations: {
         todos: true,
@@ -28,25 +21,28 @@ export class UserService {
     });
   }
 
-  public static async createUser(params: CreateUserParams): Promise<string> {
+  public static async createUser(
+    params: CreateUserParams,
+  ): Promise<CreateUserResponse> {
     const { password, ...userParams } = params;
     const passwordHash = await AuthService.hashPassword(password);
     const user = dataSource.getRepository(User).create({
       ...userParams,
       passwordHash,
     });
-    await dataSource.getRepository(User).save(user);
+    const savedUser = await dataSource.getRepository(User).save(user);
     const token = AuthService.createUserToken(user);
-    return token;
+    return { user: savedUser, token };
   }
 
   public static async updateUser(
     id: UserId,
     params: UpdateUserParams,
-  ): Promise<User> {
+  ): Promise<User | null> {
     const user = await dataSource.getRepository(User).findOneBy({
       id,
     });
+    if (!user) return null;
     dataSource.getRepository(User).merge(user, params);
     return await dataSource.getRepository(User).save(user);
   }
