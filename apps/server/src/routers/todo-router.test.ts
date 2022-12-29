@@ -16,14 +16,10 @@ async function createTodo(userToken: string): Promise<{
     description: "Test todo",
     done: false,
   };
-  const res = await supertest(app).post("/todos").set(
-    "Accept",
-    "application/json",
-  )
-    .set(
-      "Authorization",
-      `Bearer ${userToken}`,
-    )
+  const res = await supertest(app)
+    .post("/todos")
+    .set("Accept", "application/json")
+    .set("Authorization", `Bearer ${userToken}`)
     .send(requestBody);
   return { res, requestBody };
 }
@@ -43,10 +39,10 @@ describe("todoRouter", () => {
       description: "Test todo",
       done: false,
     };
-    const res = await supertest(app).post("/todos").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .post("/todos")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.statusCode).toBe(401);
   });
 
@@ -56,26 +52,22 @@ describe("todoRouter", () => {
       description: 42,
       done: false,
     };
-    const res = await supertest(app).post("/todos").set(
-      "Accept",
-      "application/json",
-    )
-      .set(
-        "Authorization",
-        `Bearer ${signUpRes.body.token}`,
-      )
+    const res = await supertest(app)
+      .post("/todos")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`)
       .send(requestBody);
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual(
-      {
-        "errors": [{
-          "value": 42,
-          "msg": "Invalid value",
-          "param": "description",
-          "location": "body",
-        }],
-      },
-    );
+    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
+      errors: [
+        {
+          value: 42,
+          msg: "Invalid value",
+          param: "description",
+          location: "body",
+        },
+      ],
+    });
   });
 
   it("should create a new todo for authorized user on valid POST requests to /todos", async () => {
@@ -96,10 +88,9 @@ describe("todoRouter", () => {
     const { res: signUpRes } = await userSignUpRequest();
     await createTodo(signUpRes.body.token);
     await createTodo(signUpRes.body.token);
-    const res = await supertest(app).get("/todos").set(
-      "Authorization",
-      `Bearer ${signUpRes.body.token}`,
-    );
+    const res = await supertest(app)
+      .get("/todos")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveLength(2);
     expect(res.body[0].user.id).toEqual(signUpRes.body.user.id);
@@ -117,28 +108,25 @@ describe("todoRouter", () => {
     const { res: signUpResOne } = await userSignUpRequest("test1@test.com");
     await createTodo(signUpResOne.body.token);
     const { res: signUpResTwo } = await userSignUpRequest("test2@test.com");
-    const res = await supertest(app).get("/todos/1")
-      .set(
-        "Authorization",
-        `Bearer ${signUpResTwo.body.token}`,
-      );
+    const res = await supertest(app)
+      .get("/todos/1")
+      .set("Authorization", `Bearer ${signUpResTwo.body.token}`);
     expect(res.statusCode).toBe(403);
   });
 
   it("should respond with 404 to GET requests to /todos/:id where no todo was found for id", async () => {
     const { res: signUpRes } = await userSignUpRequest();
-    const res = await supertest(app).get("/todos/1")
-      .set(
-        "Authorization",
-        `Bearer ${signUpRes.body.token}`,
-      );
+    const res = await supertest(app)
+      .get("/todos/1")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(404);
   });
 
   it("should respond with todo to valid GET requests to /todos/:id", async () => {
     const { res: signUpRes } = await userSignUpRequest();
     const { res: createTodoRes } = await createTodo(signUpRes.body.token);
-    const res = await supertest(app).get("/todos/1")
+    const res = await supertest(app)
+      .get("/todos/1")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(200);
@@ -151,10 +139,10 @@ describe("todoRouter", () => {
     };
     const { res: signUpRes } = await userSignUpRequest();
     await createTodo(signUpRes.body.token);
-    const res = await supertest(app).patch("/todos/1").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .patch("/todos/1")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.statusCode).toBe(401);
   });
 
@@ -165,7 +153,8 @@ describe("todoRouter", () => {
     const { res: signUpResOne } = await userSignUpRequest("test1@test.com");
     await createTodo(signUpResOne.body.token);
     const { res: signUpResTwo } = await userSignUpRequest("test2@test.com");
-    const res = await supertest(app).patch("/todos/1")
+    const res = await supertest(app)
+      .patch("/todos/1")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${signUpResTwo.body.token}`)
       .send(requestBody);
@@ -177,7 +166,8 @@ describe("todoRouter", () => {
       done: true,
     };
     const { res: signUpRes } = await userSignUpRequest();
-    const res = await supertest(app).patch("/todos/1")
+    const res = await supertest(app)
+      .patch("/todos/1")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${signUpRes.body.token}`)
       .send(requestBody);
@@ -190,7 +180,8 @@ describe("todoRouter", () => {
     };
     const { res: signUpRes } = await userSignUpRequest();
     await createTodo(signUpRes.body.token);
-    const res = await supertest(app).patch("/todos/1")
+    const res = await supertest(app)
+      .patch("/todos/1")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${signUpRes.body.token}`)
       .send(requestBody);
@@ -205,26 +196,22 @@ describe("todoRouter", () => {
       description: 42,
       done: false,
     };
-    const res = await supertest(app).patch("/todos/1").set(
-      "Accept",
-      "application/json",
-    )
-      .set(
-        "Authorization",
-        `Bearer ${signUpRes.body.token}`,
-      )
+    const res = await supertest(app)
+      .patch("/todos/1")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`)
       .send(requestBody);
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual(
-      {
-        "errors": [{
-          "value": 42,
-          "msg": "Invalid value",
-          "param": "description",
-          "location": "body",
-        }],
-      },
-    );
+    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
+      errors: [
+        {
+          value: 42,
+          msg: "Invalid value",
+          param: "description",
+          location: "body",
+        },
+      ],
+    });
   });
 
   it("should respond with 401 to unauthorized DELETE requests to /todos/:id", async () => {
@@ -238,14 +225,16 @@ describe("todoRouter", () => {
     const { res: signUpResOne } = await userSignUpRequest("test1@test.com");
     await createTodo(signUpResOne.body.token);
     const { res: signUpResTwo } = await userSignUpRequest("test2@test.com");
-    const res = await supertest(app).delete("/todos/1")
+    const res = await supertest(app)
+      .delete("/todos/1")
       .set("Authorization", `Bearer ${signUpResTwo.body.token}`);
     expect(res.statusCode).toBe(403);
   });
 
   it("should respond with 404 to DELETE requests to /todos/:id where no todo was found for id", async () => {
     const { res: signUpRes } = await userSignUpRequest();
-    const res = await supertest(app).delete("/todos/1")
+    const res = await supertest(app)
+      .delete("/todos/1")
       .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(404);
   });
@@ -253,7 +242,8 @@ describe("todoRouter", () => {
   it("should respond with delete result to valid DELETE requests to /todos/:id", async () => {
     const { res: signUpRes } = await userSignUpRequest();
     await createTodo(signUpRes.body.token);
-    const res = await supertest(app).delete("/todos/1")
+    const res = await supertest(app)
+      .delete("/todos/1")
       .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toStrictEqual({});

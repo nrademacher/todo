@@ -3,18 +3,18 @@ import supertest, { type Response } from "supertest";
 import { app } from "../app";
 import type { CreateUserParams, UpdateUserParams } from "../services";
 
-export async function userSignUpRequest(email = "test@testing.com"): Promise<
-  { res: Response; requestBody: CreateUserParams }
-> {
+export async function userSignUpRequest(
+  email = "test@testing.com"
+): Promise<{ res: Response; requestBody: CreateUserParams }> {
   const requestBody: CreateUserParams = {
     username: "Test",
     email,
     password: "testing123XYZ!",
   };
-  const res = await supertest(app).post("/user").set(
-    "Accept",
-    "application/json",
-  ).send(requestBody);
+  const res = await supertest(app)
+    .post("/user")
+    .set("Accept", "application/json")
+    .send(requestBody);
   return {
     res,
     requestBody,
@@ -47,26 +47,27 @@ describe("userRouter", () => {
       password: weakPassword,
       email: invalidEmail,
     };
-    const res = await supertest(app).post("/user").set(
-      "Accept",
-      "application/json",
-    ).send(signUpParams);
+    const res = await supertest(app)
+      .post("/user")
+      .set("Accept", "application/json")
+      .send(signUpParams);
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual(
-      {
-        "errors": [{
-          "value": "abcde",
-          "msg": "Invalid value",
-          "param": "password",
-          "location": "body",
-        }, {
-          "location": "body",
-          "msg": "Invalid value",
-          "param": "email",
-          "value": "test.testing.com",
-        }],
-      },
-    );
+    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
+      errors: [
+        {
+          value: "abcde",
+          msg: "Invalid value",
+          param: "password",
+          location: "body",
+        },
+        {
+          location: "body",
+          msg: "Invalid value",
+          param: "email",
+          value: "test.testing.com",
+        },
+      ],
+    });
   });
 
   it("should respond with 401 to unauthorized GET requests to /user", async () => {
@@ -76,20 +77,19 @@ describe("userRouter", () => {
 
   it("should respond with current user on valid GET requests to /user", async () => {
     const { res: signUpRes, requestBody } = await userSignUpRequest();
-    const res = await supertest(app).get("/user").set(
-      "Authorization",
-      `Bearer ${signUpRes.body.token}`,
-    );
+    const res = await supertest(app)
+      .get("/user")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.email).toEqual(requestBody.email);
   });
 
   it("should respond with 401 to unauthorized PATCH requests to /user", async () => {
     const requestBody: UpdateUserParams = { email: "update@test.com" };
-    const res = await supertest(app).patch("/user").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .patch("/user")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.statusCode).toBe(401);
   });
 
@@ -101,46 +101,37 @@ describe("userRouter", () => {
       email: invalidEmail,
       password: weakPassword,
     };
-    const res = await supertest(app).patch("/user")
-      .set(
-        "Accept",
-        "application/json",
-      )
-      .set(
-        "Authorization",
-        `Bearer ${signUpRes.body.token}`,
-      )
+    const res = await supertest(app)
+      .patch("/user")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`)
       .send(requestBody);
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual(
-      {
-        "errors": [{
-          "value": "abcde",
-          "msg": "Invalid value",
-          "param": "password",
-          "location": "body",
-        }, {
-          "location": "body",
-          "msg": "Invalid value",
-          "param": "email",
-          "value": "test.testing.com",
-        }],
-      },
-    );
+    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
+      errors: [
+        {
+          value: "abcde",
+          msg: "Invalid value",
+          param: "password",
+          location: "body",
+        },
+        {
+          location: "body",
+          msg: "Invalid value",
+          param: "email",
+          value: "test.testing.com",
+        },
+      ],
+    });
   });
 
   it("should respond with updated user on valid PATCH requests to /user", async () => {
     const { res: signUpRes } = await userSignUpRequest();
     const requestBody: UpdateUserParams = { email: "update@test.com" };
-    const res = await supertest(app).patch("/user")
-      .set(
-        "Accept",
-        "application/json",
-      )
-      .set(
-        "Authorization",
-        `Bearer ${signUpRes.body.token}`,
-      )
+    const res = await supertest(app)
+      .patch("/user")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`)
       .send(requestBody);
     expect(res.statusCode).toBe(200);
     expect(res.body.email).toEqual(requestBody.email);
@@ -153,11 +144,9 @@ describe("userRouter", () => {
 
   it("should respond with delete result on valid DELETE requests to /user", async () => {
     const { res: signUpRes } = await userSignUpRequest();
-    const res = await supertest(app).delete("/user")
-      .set(
-        "Authorization",
-        `Bearer ${signUpRes.body.token}`,
-      );
+    const res = await supertest(app)
+      .delete("/user")
+      .set("Authorization", `Bearer ${signUpRes.body.token}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toStrictEqual({});
   });

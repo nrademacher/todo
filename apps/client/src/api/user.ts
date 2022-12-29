@@ -26,13 +26,13 @@ export async function getCurrentUser(): Promise<User | null> {
   return res.data;
 }
 
-export type CreateUserParams =
-  & Pick<User, "email" | "username">
-  & { password: string };
+export type CreateUserParams = Pick<User, "email" | "username"> & {
+  password: string;
+};
 export type UserAuthResponse = { token: string };
 
 export async function createUser(
-  params: CreateUserParams,
+  params: CreateUserParams
 ): Promise<UserAuthResponse | void> {
   const res = await axios.post(`${API_URL}/${USER_ROUTE_NAME}`, params, {
     headers: setAuthorization(),

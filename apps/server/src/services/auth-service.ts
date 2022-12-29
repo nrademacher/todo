@@ -21,10 +21,7 @@ export class AuthorizationError extends Error {
 
 export class AuthService {
   public static createUserToken(user: User): string {
-    const token = sign(
-      { id: user.id, email: user.email },
-      config.secrets.jwt,
-    );
+    const token = sign({ id: user.id, email: user.email }, config.secrets.jwt);
     return token;
   }
 
@@ -39,7 +36,7 @@ export class AuthService {
 
   private static async isPasswordMatch(
     password: string,
-    hash: string,
+    hash: string
   ): Promise<boolean> {
     return await compare(password, hash);
   }
@@ -54,7 +51,7 @@ export class AuthService {
 
     const passwordMatch = await this.isPasswordMatch(
       params.password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!passwordMatch) {
       throw new AuthorizationError("Invalid credentials", 403);

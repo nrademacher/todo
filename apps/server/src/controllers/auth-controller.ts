@@ -4,7 +4,7 @@ import type { Response } from "express";
 export class AuthController {
   public static async signInUser(
     params: SignInUserParams,
-    res: Response,
+    res: Response
   ): Promise<void> {
     try {
       const token = await AuthService.signInUser(params);

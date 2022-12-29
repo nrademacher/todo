@@ -1,3 +1,2 @@
-export { TodoList } from './TodoList'
-export { TodoForm } from './TodoForm'
-export { ProtectedRoute } from './ProtectedRoute'
+export { ProtectedRoute } from "./ProtectedRoute";
+export * from "./todos";

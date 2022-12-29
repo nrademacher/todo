@@ -7,12 +7,12 @@ const AUTH_ROUTE_NAME = "auth";
 export type SignInUserParams = Pick<CreateUserParams, "email" | "password">;
 
 export async function signInUser(
-  params: SignInUserParams,
+  params: SignInUserParams
 ): Promise<UserAuthResponse | void> {
   try {
     const res = await axios.post(
       `${API_URL}/${AUTH_ROUTE_NAME}/signin`,
-      params,
+      params
     );
     return res.data;
   } catch (e) {

@@ -55,20 +55,15 @@ export function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button
-          type="submit"
-          disabled={!email || !password}
-        >
+        <button type="submit" disabled={!email || !password}>
           Sign in
         </button>
       </form>
-      {error
-        ? (
-          <p style={{ color: "red" }}>
-            {(error as AxiosError).response.data.message}
-          </p>
-        )
-        : null}
+      {error ? (
+        <p style={{ color: "red" }}>
+          {(error as AxiosError).response.data.message}
+        </p>
+      ) : null}
       <Link to="/signup">Sign up</Link>
     </div>
   );

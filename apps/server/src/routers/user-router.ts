@@ -11,18 +11,22 @@ import { handleError, protect, validate } from "../middlewares";
 
 const userRouter = Router();
 
-userRouter.post("/", [
-  body("username").isString().exists(),
-  body("password").isStrongPassword().exists(),
-  body("email").isEmail().exists(),
-  validate,
-], async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await UserController.createUser(req.body, res);
-  } catch (err) {
-    next(new ServerError(err.message));
+userRouter.post(
+  "/",
+  [
+    body("username").isString().exists(),
+    body("password").isStrongPassword().exists(),
+    body("email").isEmail().exists(),
+    validate,
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await UserController.createUser(req.body, res);
+    } catch (err) {
+      next(new ServerError(err.message));
+    }
   }
-});
+);
 
 userRouter.get(
   "/",
@@ -33,7 +37,7 @@ userRouter.get(
     } catch (err) {
       next(new ServerError(err.message));
     }
-  },
+  }
 );
 
 userRouter.patch(
@@ -47,15 +51,11 @@ userRouter.patch(
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await UserController.updateUser(
-        req.user.id,
-        req.body,
-        res,
-      );
+      await UserController.updateUser(req.user.id, req.body, res);
     } catch (err) {
       next(new ServerError(err.message));
     }
-  },
+  }
 );
 
 userRouter.delete(
@@ -67,7 +67,7 @@ userRouter.delete(
     } catch (err) {
       next(new ServerError(err.message));
     }
-  },
+  }
 );
 
 userRouter.use(handleError);

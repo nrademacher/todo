@@ -30,9 +30,7 @@ export async function createTodo(params: CreateTodoParams): Promise<void> {
 
 export type TodoId = Todo["id"];
 
-export async function getTodoById(
-  id: TodoId,
-): Promise<void> {
+export async function getTodoById(id: TodoId): Promise<void> {
   const res = await axios.get(`${API_URL}/${TODO_ROUTE_NAME}/${id}`, {
     headers: setAuthorization(),
   });
@@ -43,21 +41,17 @@ export type UpdateTodoParams = Pick<Todo, "id"> & {
   payload: Partial<Pick<Todo, "description" | "done">>;
 };
 
-export async function updateTodo(
-  params: UpdateTodoParams,
-): Promise<void> {
+export async function updateTodo(params: UpdateTodoParams): Promise<void> {
   await axios.patch(
     `${API_URL}/${TODO_ROUTE_NAME}/${params.id}`,
     params.payload,
     {
       headers: setAuthorization(),
-    },
+    }
   );
 }
 
-export async function deleteTodo(
-  id: TodoId,
-): Promise<void> {
+export async function deleteTodo(id: TodoId): Promise<void> {
   await axios.delete(`${API_URL}/${TODO_ROUTE_NAME}/${id}`, {
     headers: setAuthorization(),
   });
