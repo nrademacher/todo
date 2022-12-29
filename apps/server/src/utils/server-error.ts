@@ -11,7 +11,7 @@ export class ServerError extends Error {
 
   constructor(originalMessage: string, type?: ServerErrorTypes) {
     super();
-    this.originalMessage = originalMessage
+    this.originalMessage = originalMessage;
     this.type = type;
     if (this.type === ServerErrorTypes.AUTH) {
       this.statusCode = 401;

@@ -11,7 +11,7 @@ export type CreateUserResponse = { user: User; token: string };
 
 export class UserService {
   public static async getUserById(id: UserId): Promise<User | null> {
-    return await dataSource.getRepository(User).findOne({
+    const res = await dataSource.getRepository(User).findOne({
       relations: {
         todos: true,
       },
@@ -19,10 +19,11 @@ export class UserService {
         id,
       },
     });
+    return res;
   }
 
   public static async createUser(
-    params: CreateUserParams,
+    params: CreateUserParams
   ): Promise<CreateUserResponse> {
     const { password, ...userParams } = params;
     const passwordHash = await AuthService.hashPassword(password);
@@ -37,7 +38,7 @@ export class UserService {
 
   public static async updateUser(
     id: UserId,
-    params: UpdateUserParams,
+    params: UpdateUserParams
   ): Promise<User | null> {
     const user = await dataSource.getRepository(User).findOneBy({
       id,

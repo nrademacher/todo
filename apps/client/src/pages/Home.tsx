@@ -2,19 +2,17 @@ import { useAuth, useCurrentUser } from "../hooks";
 import { TodoForm, TodoList } from "../components";
 
 export function Home() {
-  const { user } = useCurrentUser()
+  const { user } = useCurrentUser();
   const { signOut } = useAuth();
 
   return (
     <div>
-      {user
-        ? (
-          <header>
-            <h1>Welcome, {user.username}!</h1>
-            <button onClick={() => signOut()}>Sign out</button>
-          </header>
-        )
-        : null}
+      {user ? (
+        <header>
+          <h1>Welcome, {user.username}!</h1>
+          <button onClick={() => signOut()}>Sign out</button>
+        </header>
+      ) : null}
       <TodoList />
       <TodoForm />
     </div>

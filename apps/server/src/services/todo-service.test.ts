@@ -42,10 +42,8 @@ describe("TodoService", () => {
       done: false,
     });
     const result = await TodoService.getTodos(user.id);
-    expect(result.find((todo) => todo.id === todoOneId))
-      .toBeTruthy();
-    expect(result.find((todo) => todo.id === todoTwoId))
-      .toBeTruthy();
+    expect(result.find((todo) => todo.id === todoOneId)).toBeTruthy();
+    expect(result.find((todo) => todo.id === todoTwoId)).toBeTruthy();
   });
 
   it("gets a todo by id", async () => {

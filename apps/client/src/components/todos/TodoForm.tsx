@@ -1,21 +1,16 @@
 import { useState } from "react";
-import { useTodos } from "../hooks";
+import { useTodos } from "../../hooks";
 
 export const TodoForm: React.FC = () => {
   const [todoDescription, setTodoDescription] = useState("");
   const { error, isLoading, add } = useTodos();
 
   async function handleCreate() {
-    try {
-      const newTodoParams = {
-        description: todoDescription,
-      };
-      setTodoDescription("");
-      await add(newTodoParams);
-    } catch (e) {
-      // error handling
-      throw e;
-    }
+    const newTodoParams = {
+      description: todoDescription,
+    };
+    setTodoDescription("");
+    await add(newTodoParams);
   }
 
   if (error) {

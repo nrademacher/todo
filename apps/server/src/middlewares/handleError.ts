@@ -6,6 +6,5 @@ export function handleError(
   _req: Request,
   res: Response,
 ): void {
-  console.log(err.statusCode)
   res.status(err.statusCode).json({ error: err.message });
 }

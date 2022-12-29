@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "../api";
 
 export function useCurrentUser() {
-  const {
-    data,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ["current-user"],
     queryFn: getCurrentUser,
   });
@@ -15,5 +11,6 @@ export function useCurrentUser() {
     user: data,
     error,
     isLoading,
+    isSuccess,
   };
 }

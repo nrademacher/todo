@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 export function validate(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): void {
   const errors = validationResult(req);
 

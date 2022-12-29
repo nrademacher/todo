@@ -4,11 +4,7 @@ import { createTodo, deleteTodo, getTodos, updateTodo } from "../api";
 export function useTodos() {
   const queryClient = useQueryClient();
 
-  const {
-    data,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["todos"],
     queryFn: getTodos,
   });
@@ -37,8 +33,8 @@ export function useTodos() {
   return {
     todos: data,
     error: error || add.error || update.error || remove.error,
-    isLoading: isLoading || add.isLoading || update.isLoading ||
-      remove.isLoading,
+    isLoading:
+      isLoading || add.isLoading || update.isLoading || remove.isLoading,
     add: add.mutateAsync,
     update: update.mutateAsync,
     remove: remove.mutateAsync,

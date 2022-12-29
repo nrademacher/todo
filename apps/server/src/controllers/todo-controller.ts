@@ -8,10 +8,7 @@ import {
 } from "../services";
 
 export class TodoController {
-  public static async getTodos(
-    reqId: UserId,
-    res: Response,
-  ): Promise<void> {
+  public static async getTodos(reqId: UserId, res: Response): Promise<void> {
     const todos = await TodoService.getTodos(reqId);
     res.send(todos);
   }
@@ -19,7 +16,7 @@ export class TodoController {
   public static async getTodoById(
     reqId: UserId,
     id: TodoId,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const todo = await TodoService.getTodoById(id);
     if (!todo) {
@@ -36,7 +33,7 @@ export class TodoController {
   public static async createTodo(
     params: CreateTodoParams,
     userId: UserId,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const todo = await TodoService.createTodo(userId, params);
     res.send(todo);
@@ -46,7 +43,7 @@ export class TodoController {
     reqId: UserId,
     id: TodoId,
     params: UpdateTodoParams,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const todo = await TodoService.getTodoById(id);
     if (!todo) {
@@ -64,7 +61,7 @@ export class TodoController {
   public static async deleteTodo(
     reqId: UserId,
     id: TodoId,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const todo = await TodoService.getTodoById(id);
     if (!todo) {

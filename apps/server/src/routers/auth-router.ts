@@ -19,7 +19,7 @@ authRouter.post(
     } catch (e) {
       next(new ServerError(e.message, ServerErrorTypes.AUTH));
     }
-  },
+  }
 );
 
 authRouter.use(handleError);

@@ -4,7 +4,7 @@ import type { DeleteResult } from "typeorm";
 
 export type TodoId = Todo["id"];
 export type CreateTodoParams = Omit<Todo, "id" | "user">;
-export type UpdateTodoParams = Partial<CreateTodoParams>
+export type UpdateTodoParams = Partial<CreateTodoParams>;
 
 export class TodoService {
   public static async getTodos(userId: UserId): Promise<Todo[]> {
@@ -31,7 +31,7 @@ export class TodoService {
 
   public static async createTodo(
     userId: UserId,
-    params: CreateTodoParams,
+    params: CreateTodoParams
   ): Promise<Todo> {
     const user = await dataSource.getRepository(User).findOneBy({ id: userId });
     const todo = dataSource.getRepository(Todo).create({ ...params, user });
@@ -40,7 +40,7 @@ export class TodoService {
 
   public static async updateTodo(
     id: TodoId,
-    params: UpdateTodoParams,
+    params: UpdateTodoParams
   ): Promise<Todo | null> {
     const todo = await dataSource.getRepository(Todo).findOne({
       relations: {
@@ -50,7 +50,7 @@ export class TodoService {
         id,
       },
     });
-    if (!todo) return null
+    if (!todo) return null;
     dataSource.getRepository(Todo).merge(todo, params);
     return await dataSource.getRepository(Todo).save(todo);
   }

@@ -1,4 +1,4 @@
-import { useCurrentUser, useTodos } from "../hooks";
+import { useCurrentUser, useTodos } from "../../hooks";
 import { nanoid } from "nanoid";
 import { TodoItem } from "./TodoItem";
 

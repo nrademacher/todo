@@ -1,1 +1,1 @@
-export { appRouter } from './app-router'
+export { appRouter } from "./app-router";

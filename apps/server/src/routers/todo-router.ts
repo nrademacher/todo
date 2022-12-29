@@ -27,7 +27,7 @@ todoRouter.get(
     } catch (error) {
       next(new ServerError(error.message));
     }
-  },
+  }
 );
 
 todoRouter.post(
@@ -43,7 +43,7 @@ todoRouter.post(
     } catch (error) {
       next(new ServerError(error.message));
     }
-  },
+  }
 );
 
 todoRouter.patch(
@@ -60,12 +60,12 @@ todoRouter.patch(
         req.user.id,
         Number(req.params.id),
         req.body,
-        res,
+        res
       );
     } catch (error) {
       next(new ServerError(error.message));
     }
-  },
+  }
 );
 
 todoRouter.delete(
@@ -77,7 +77,7 @@ todoRouter.delete(
     } catch (error) {
       next(new ServerError(error.message));
     }
-  },
+  }
 );
 
 todoRouter.use(handleError);

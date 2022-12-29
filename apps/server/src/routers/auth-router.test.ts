@@ -19,40 +19,41 @@ describe("authRouter", () => {
       email: "aaaaaaa",
       password: "",
     };
-    const res = await supertest(app).post("/auth/signin").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .post("/auth/signin")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual(
-      {
-        "errors": [{
-          "value": "aaaaaaa",
-          "msg": "Invalid value",
-          "param": "email",
-          "location": "body",
-        }, {
-          "location": "body",
-          "msg": "Invalid value",
-          "param": "password",
-          "value": "",
-        }],
-      },
-    );
+    expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
+      errors: [
+        {
+          value: "aaaaaaa",
+          msg: "Invalid value",
+          param: "email",
+          location: "body",
+        },
+        {
+          location: "body",
+          msg: "Invalid value",
+          param: "password",
+          value: "",
+        },
+      ],
+    });
   });
 
   it("should respond with 403 to POST requests to the /auth/signin with invalid email credential", async () => {
     const { requestBody: signUpReqBody } = await userSignUpRequest(
-      "test@test.com",
+      "test@test.com"
     );
     const requestBody: SignInUserParams = {
       email: "not@found.com",
       password: signUpReqBody.password,
     };
-    const res = await supertest(app).post("/auth/signin").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .post("/auth/signin")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.status).toBe(403);
   });
 
@@ -62,10 +63,10 @@ describe("authRouter", () => {
       email: signUpReqBody.email,
       password: signUpReqBody.password + "abcde",
     };
-    const res = await supertest(app).post("/auth/signin").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .post("/auth/signin")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.status).toBe(403);
   });
 
@@ -75,10 +76,10 @@ describe("authRouter", () => {
       email: signUpReqBody.email,
       password: signUpReqBody.password,
     };
-    const res = await supertest(app).post("/auth/signin").set(
-      "Accept",
-      "application/json",
-    ).send(requestBody);
+    const res = await supertest(app)
+      .post("/auth/signin")
+      .set("Accept", "application/json")
+      .send(requestBody);
     expect(res.status).toBe(200);
     expect(res.body.token).toBeTruthy();
     expect(typeof res.body.token === "string").toBe(true);
