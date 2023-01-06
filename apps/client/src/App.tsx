@@ -5,7 +5,7 @@ import { Home, SignIn, SignUp } from "./pages";
 
 const queryClient = new QueryClient();
 
-export function App() {
+export function App(): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

@@ -7,14 +7,17 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
 }) => {
   const { update, remove } = useTodos();
 
-  async function handleCheckedChange(todoId: TodoId, checked: boolean) {
+  async function handleCheckedChange(
+    todoId: TodoId,
+    checked: boolean
+  ): Promise<void> {
     const updateTodoParams = {
       done: checked,
     };
     await update({ id: todoId, payload: updateTodoParams });
   }
 
-  async function handleDelete(todoId: TodoId) {
+  async function handleDelete(todoId: TodoId): Promise<void> {
     await remove(todoId);
   }
 

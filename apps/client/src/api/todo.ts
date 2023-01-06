@@ -6,12 +6,12 @@ import { setAuthorization } from "./utils";
 
 const TODO_ROUTE_NAME = "todos";
 
-export type Todo = {
+export interface Todo {
   id: number;
   description: string;
   done: boolean;
   user: User;
-};
+}
 
 export async function getTodos(): Promise<Todo[] | undefined> {
   const res = await axios.get(`${API_URL}/${TODO_ROUTE_NAME}`, {

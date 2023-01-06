@@ -4,7 +4,7 @@ import type { Request, Response } from "express";
 export function handleError(
   err: ServerError,
   _req: Request,
-  res: Response,
+  res: Response
 ): void {
   res.status(err.statusCode).json({ error: err.message });
 }

@@ -5,7 +5,7 @@ export const ProtectedRoute = ({
   children,
 }: {
   children: React.ReactElement;
-}) => {
+}): JSX.Element => {
   const { isSignedIn } = useAuth();
 
   if (!isSignedIn) {

@@ -1,13 +1,13 @@
 import { useAuth, useCurrentUser } from "../hooks";
 import { TodoForm, TodoList } from "../components";
 
-export function Home() {
+export function Home(): JSX.Element {
   const { user } = useCurrentUser();
   const { signOut } = useAuth();
 
   return (
     <div>
-      {user ? (
+      {user != null ? (
         <header>
           <h1>Welcome, {user.username}!</h1>
           <button onClick={() => signOut()}>Sign out</button>

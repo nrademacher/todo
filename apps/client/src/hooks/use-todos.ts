@@ -1,19 +1,50 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createTodo, deleteTodo, getTodos, updateTodo } from "../api";
+import {
+  type UseMutateAsyncFunction,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  createTodo,
+  type CreateTodoParams,
+  deleteTodo,
+  getTodos,
+  type Todo,
+  updateTodo,
+  type UpdateTodoParams,
+} from "../api";
 
-export function useTodos() {
+interface UseTodosResult {
+  todos: Todo[] | null;
+  errors: {
+    queryError: unknown;
+    createError: unknown;
+    updateError: unknown;
+    removeError: unknown;
+  };
+  isLoading: boolean;
+  add: UseMutateAsyncFunction<void, unknown, CreateTodoParams, unknown>;
+  update: UseMutateAsyncFunction<void, unknown, UpdateTodoParams, unknown>;
+  remove: UseMutateAsyncFunction<void, unknown, number, unknown>;
+}
+
+export function useTodos(): UseTodosResult {
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading } = useQuery({
+  const {
+    data,
+    error: queryError,
+    isLoading,
+  } = useQuery({
     queryKey: ["todos"],
     queryFn: getTodos,
   });
 
-  function onMutationSuccess(): void {
-    queryClient.invalidateQueries({ queryKey: ["todos"] });
+  async function onMutationSuccess(): Promise<void> {
+    await queryClient.invalidateQueries({ queryKey: ["todos"] });
   }
 
-  const add = useMutation({
+  const create = useMutation({
     mutationFn: createTodo,
     onSuccess: onMutationSuccess,
   });
@@ -25,17 +56,20 @@ export function useTodos() {
 
   const remove = useMutation({
     mutationFn: deleteTodo,
-    onSuccess: () => {
-      setTimeout(onMutationSuccess, 500);
-    },
+    onSuccess: onMutationSuccess,
   });
 
   return {
-    todos: data,
-    error: error || add.error || update.error || remove.error,
+    todos: typeof data === "undefined" ? null : data,
+    errors: {
+      queryError,
+      createError: create.error,
+      updateError: update.error,
+      removeError: remove.error,
+    },
     isLoading:
-      isLoading || add.isLoading || update.isLoading || remove.isLoading,
-    add: add.mutateAsync,
+      isLoading || create.isLoading || update.isLoading || remove.isLoading,
+    add: create.mutateAsync,
     update: update.mutateAsync,
     remove: remove.mutateAsync,
   };
