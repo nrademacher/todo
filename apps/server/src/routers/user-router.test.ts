@@ -79,7 +79,7 @@ describe("userRouter", () => {
     const { res: signUpRes, requestBody } = await userSignUpRequest();
     const res = await supertest(app)
       .get("/user")
-      .set("Authorization", `Bearer ${signUpRes.body.token}`);
+      .set("Authorization", `Bearer ${signUpRes.body.token as string}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.email).toEqual(requestBody.email);
   });
@@ -104,7 +104,7 @@ describe("userRouter", () => {
     const res = await supertest(app)
       .patch("/user")
       .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${signUpRes.body.token}`)
+      .set("Authorization", `Bearer ${signUpRes.body.token as string}`)
       .send(requestBody);
     expect(res.statusCode).toBe(400);
     expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
@@ -131,7 +131,7 @@ describe("userRouter", () => {
     const res = await supertest(app)
       .patch("/user")
       .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${signUpRes.body.token}`)
+      .set("Authorization", `Bearer ${signUpRes.body.token as string}`)
       .send(requestBody);
     expect(res.statusCode).toBe(200);
     expect(res.body.email).toEqual(requestBody.email);
@@ -146,7 +146,7 @@ describe("userRouter", () => {
     const { res: signUpRes } = await userSignUpRequest();
     const res = await supertest(app)
       .delete("/user")
-      .set("Authorization", `Bearer ${signUpRes.body.token}`);
+      .set("Authorization", `Bearer ${signUpRes.body.token as string}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toStrictEqual({});
   });

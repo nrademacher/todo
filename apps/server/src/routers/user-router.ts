@@ -4,7 +4,12 @@ import {
   type Response,
   Router,
 } from "express";
-import { UserController } from "../controllers";
+import {
+  createUser,
+  deleteUser,
+  getUserById,
+  updateUser,
+} from "../controllers";
 import { ServerError } from "../utils";
 import { body } from "express-validator";
 import { handleError, protect, validate } from "../middlewares";
@@ -21,7 +26,7 @@ userRouter.post(
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await UserController.createUser(req.body, res);
+      await createUser(req.body, res);
     } catch (err) {
       next(new ServerError(err.message));
     }
@@ -33,7 +38,10 @@ userRouter.get(
   protect,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await UserController.getUserById(req.user.id, res);
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await getUserById(req.user.id, res);
     } catch (err) {
       next(new ServerError(err.message));
     }
@@ -51,7 +59,10 @@ userRouter.patch(
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await UserController.updateUser(req.user.id, req.body, res);
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await updateUser(req.user.id, req.body, res);
     } catch (err) {
       next(new ServerError(err.message));
     }
@@ -63,7 +74,10 @@ userRouter.delete(
   protect,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await UserController.deleteUser(req.user.id, res);
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await deleteUser(req.user.id, res);
     } catch (err) {
       next(new ServerError(err.message));
     }

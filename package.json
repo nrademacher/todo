@@ -9,6 +9,7 @@
     "dev:client": "pnpm --filter client dev",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
     "format": "pnpm -r format",
+    "lint:server": "pnpm --filter server lint",
     "lint:client": "pnpm --filter client lint",
     "test:server": "pnpm --filter server test",
     "test:client": "pnpm --filter client test",

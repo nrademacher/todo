@@ -1,14 +1,15 @@
 import * as dotenv from "dotenv";
 import type { DeepPartial } from "typeorm";
+import env from "env-var";
 import merge from "lodash.merge";
 
 dotenv.config();
 
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
+if (process.env.NODE_ENV === undefined) {
+  process.env.NODE_ENV = "development";
+}
 
-const stage = process.env.STAGE || "local";
-
-type Config = {
+interface Config {
   stage: string;
   env: string;
   port: number;
@@ -19,36 +20,40 @@ type Config = {
       host: string;
       name: string;
       username: string;
-      password: string | undefined;
+      password: string;
     };
   };
-};
+}
 
 export type EnvConfig = DeepPartial<Config>;
 
+const stage = env.get("STAGE").required().asString();
+
 const baseConfig: Config = {
   stage,
-  env: process.env.NODE_ENV,
-  port: Number(process.env.PORT),
+  env: env.get("NODE_ENV").required().asString(),
+  port: env.get("PORT").required().asInt(),
   secrets: {
-    jwt: process.env.JWT_SECRET || "dev_secret",
+    jwt: env.get("JWT_SECRET").required().asString(),
     db: {
-      port: 3306,
-      host: process.env.DB_HOST || "localhost",
-      name: process.env.DB_NAME || "todo",
-      username: process.env.DB_USERNAME || "root",
-      password: process.env.DB_PASSWORD,
+      host: env.get("DB_HOST").required().asString(),
+      port: env.get("DB_PORT").required().asInt(),
+      name: env.get("DB_NAME").required().asString(),
+      username: env.get("DB_USERNAME").required().asString(),
+      password: env.get("DB_PASSWORD").required().asString(),
     },
   },
 };
 
 let envConfig: Config;
 if (stage === "production") {
+  /* eslint-disable @typescript-eslint/no-var-requires */
   envConfig = require("./prod").default;
 } else if (stage === "testing") {
   envConfig = require("./testing").default;
 } else {
   envConfig = require("./local").default;
+  /* eslint-enable @typescript-eslint/no-var-requires */
 }
 
 export const config = merge(baseConfig, envConfig);

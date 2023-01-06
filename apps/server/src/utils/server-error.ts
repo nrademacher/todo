@@ -4,7 +4,7 @@ export enum ServerErrorTypes {
 }
 
 export class ServerError extends Error {
-  readonly type: ServerErrorTypes;
+  readonly type?: ServerErrorTypes;
   readonly statusCode: number;
   readonly originalMessage: string;
   readonly name = "ServerError";

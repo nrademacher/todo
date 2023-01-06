@@ -1,39 +1,39 @@
 import type { Response } from "express";
-import {
-  type CreateUserParams,
-  type UpdateUserParams,
-  type UserId,
-  UserService,
-} from "../services";
+import type { CreateUserParams, UpdateUserParams, UserId } from "../services";
+import * as userService from "../services/user-service";
 
-export class UserController {
-  public static async getUserById(id: UserId, res: Response): Promise<void> {
-    const user = await UserService.getUserById(id);
-    delete user.passwordHash;
-    res.send(user);
+export async function getUserById(id: UserId, res: Response): Promise<void> {
+  const user = await userService.getUserById(id);
+  if (user == null) {
+    throw new Error("User not found");
   }
+  const { passwordHash, ...result } = user;
+  res.send(result);
+}
 
-  public static async createUser(
-    params: CreateUserParams,
-    res: Response
-  ): Promise<void> {
-    const result = await UserService.createUser(params);
-    delete result.user.passwordHash;
-    res.json(result);
-  }
+export async function createUser(
+  params: CreateUserParams,
+  res: Response
+): Promise<void> {
+  const createResult = await userService.createUser(params);
+  const { passwordHash, ...sanitizedUser } = createResult.user;
+  res.json({ token: createResult.token, user: sanitizedUser });
+}
 
-  public static async updateUser(
-    id: UserId,
-    params: UpdateUserParams,
-    res: Response
-  ): Promise<void> {
-    const user = await UserService.updateUser(id, params);
-    delete user.passwordHash;
-    res.send(user);
+export async function updateUser(
+  id: UserId,
+  params: UpdateUserParams,
+  res: Response
+): Promise<void> {
+  const user = await userService.updateUser(id, params);
+  if (user == null) {
+    throw new Error("User not found");
   }
+  const { passwordHash, ...result } = user;
+  res.send(result);
+}
 
-  public static async deleteUser(id: UserId, res: Response): Promise<void> {
-    const result = UserService.deleteUser(id);
-    res.send(result);
-  }
+export async function deleteUser(id: UserId, res: Response): Promise<void> {
+  const result = userService.deleteUser(id);
+  res.send(result);
 }

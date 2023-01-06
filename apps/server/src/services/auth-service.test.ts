@@ -1,8 +1,14 @@
 import { dataSource, User } from "../database";
-import { type AuthorizationError, AuthService } from "./auth-service";
+import {
+  authorizeUser,
+  createUserToken,
+  hashPassword,
+  signInUser,
+  type AuthorizationError,
+} from "./auth-service";
 import { compare } from "bcryptjs";
 
-describe("AuthService", () => {
+describe("auth service", () => {
   beforeEach(async () => {
     await dataSource.initialize();
   });
@@ -18,7 +24,7 @@ describe("AuthService", () => {
       passwordHash: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const token = AuthService.createUserToken(user);
+    const token = createUserToken(user);
     expect(token).toBeTruthy();
     expect(typeof token === "string").toBe(true);
   });
@@ -29,20 +35,20 @@ describe("AuthService", () => {
       passwordHash: "testing123XYZ!",
       email: "test@testing.com",
     });
-    const token = AuthService.createUserToken(user);
-    const decodedProperties = AuthService.authorizeUser(token);
+    const token = createUserToken(user);
+    const decodedProperties = authorizeUser(token);
     expect(user.id).toEqual(decodedProperties.id);
   });
 
   it("creates a hash that encodes a given password", async () => {
     const password = "testing123XYZ";
-    const passwordHash = await AuthService.hashPassword(password);
+    const passwordHash = await hashPassword(password);
     expect(await compare(password, passwordHash)).toBe(true);
   });
 
   it("creates an auth token given parameters for user sign-ins", async () => {
     const password = "testing123XYZ";
-    const passwordHash = await AuthService.hashPassword(password);
+    const passwordHash = await hashPassword(password);
     await dataSource.getRepository(User).save({
       username: "Test",
       passwordHash,
@@ -52,7 +58,7 @@ describe("AuthService", () => {
       email: "test@testing.com",
       password,
     };
-    const signInToken = await AuthService.signInUser(signInParams);
+    const signInToken = await signInUser(signInParams);
     expect(signInToken).toBeTruthy();
     expect(typeof signInToken === "string").toBe(true);
   });
@@ -64,19 +70,19 @@ describe("AuthService", () => {
       password,
     };
     let result: string | undefined;
-    let expectedError: AuthorizationError;
+    let expectedError: AuthorizationError | undefined;
     try {
-      result = await AuthService.signInUser(signInParams);
+      result = await signInUser(signInParams);
     } catch (error) {
       expectedError = error;
     }
     expect(result).toBeUndefined();
-    expect(expectedError.message).toEqual("Invalid credentials");
+    expect(expectedError?.message).toEqual("Invalid credentials");
   });
 
   it("throws an appropriate error if user exists but wrong sign-in credential", async () => {
     const password = "testing123XYZ";
-    const passwordHash = await AuthService.hashPassword(password);
+    const passwordHash = await hashPassword(password);
     await dataSource.getRepository(User).save({
       username: "Test",
       passwordHash,
@@ -87,13 +93,13 @@ describe("AuthService", () => {
       password: "wrong_password",
     };
     let result: string | undefined;
-    let expectedError: AuthorizationError;
+    let expectedError: AuthorizationError | undefined;
     try {
-      result = await AuthService.signInUser(signInParams);
+      result = await signInUser(signInParams);
     } catch (error) {
       expectedError = error;
     }
     expect(result).toBeUndefined();
-    expect(expectedError.message).toEqual("Invalid credentials");
+    expect(expectedError?.message).toEqual("Invalid credentials");
   });
 });
