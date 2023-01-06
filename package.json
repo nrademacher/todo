@@ -12,6 +12,7 @@
     "format": "pnpm -r format",
     "lint:server": "pnpm --filter server lint",
     "lint:client": "pnpm --filter client lint",
+    "lint": "pnpm lint:server && pnpm lint:client",
     "test:server": "pnpm --filter server test",
     "test:client": "pnpm --filter client test",
     "test": "pnpm test:server && pnpm test:client"
