@@ -1,7 +1,7 @@
 {
   "name": "todo",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Full-stack Todo app",
   "main": "index.js",
   "scripts": {
     "db:up": "docker compose up -d",
