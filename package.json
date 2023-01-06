@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:up": "docker compose up -d",
     "db:drop": "pnpm --filter server db:drop",
     "dev:server": "pnpm --filter server dev",
     "dev:client": "pnpm --filter client dev",
