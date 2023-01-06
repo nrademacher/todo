@@ -1,3 +1,3 @@
-export { TodoController } from "./todo-controller";
-export { UserController } from "./user-controller";
-export { AuthController } from "./auth-controller";
+export * from "./user-controller";
+export * from "./auth-controller";
+export * from "./todo-controller";

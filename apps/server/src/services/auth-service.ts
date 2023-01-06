@@ -19,45 +19,43 @@ export class AuthorizationError extends Error {
   }
 }
 
-export class AuthService {
-  public static createUserToken(user: User): string {
-    const token = sign({ id: user.id, email: user.email }, config.secrets.jwt);
-    return token;
+export function createUserToken(user: User): string {
+  const token = sign({ id: user.id, email: user.email }, config.secrets.jwt);
+  return token;
+}
+
+export function authorizeUser(token: string): UserAuthPayload {
+  const user = verify(token, config.secrets.jwt) as UserAuthPayload;
+  return user;
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  return await hash(password, 5);
+}
+
+async function isPasswordMatch(
+  password: string,
+  hash: string
+): Promise<boolean> {
+  return await compare(password, hash);
+}
+
+export async function signInUser(params: SignInUserParams): Promise<string> {
+  const user = await dataSource.getRepository(User).findOneBy({
+    email: params.email,
+  });
+  if (user == null) {
+    throw new AuthorizationError("Invalid credentials", 403);
   }
 
-  public static authorizeUser(token: string): UserAuthPayload {
-    const user = verify(token, config.secrets.jwt) as UserAuthPayload;
-    return user;
+  const passwordMatch = await isPasswordMatch(
+    params.password,
+    user.passwordHash
+  );
+  if (!passwordMatch) {
+    throw new AuthorizationError("Invalid credentials", 403);
   }
 
-  public static async hashPassword(password: string): Promise<string> {
-    return await hash(password, 5);
-  }
-
-  private static async isPasswordMatch(
-    password: string,
-    hash: string
-  ): Promise<boolean> {
-    return await compare(password, hash);
-  }
-
-  public static async signInUser(params: SignInUserParams): Promise<string> {
-    const user = await dataSource.getRepository(User).findOneBy({
-      email: params.email,
-    });
-    if (!user) {
-      throw new AuthorizationError("Invalid credentials", 403);
-    }
-
-    const passwordMatch = await this.isPasswordMatch(
-      params.password,
-      user.passwordHash
-    );
-    if (!passwordMatch) {
-      throw new AuthorizationError("Invalid credentials", 403);
-    }
-
-    const token = this.createUserToken(user);
-    return token;
-  }
+  const token = createUserToken(user);
+  return token;
 }

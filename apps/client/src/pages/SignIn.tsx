@@ -4,11 +4,11 @@ import { Link, Navigate } from "react-router-dom";
 import { SignInUserParams } from "../api";
 import { useAuth } from "../hooks";
 
-export function SignIn() {
+export function SignIn(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isSignedIn, signIn, error } = useAuth();
+  const { isSignedIn, signIn, errors } = useAuth();
 
   function resetForm(): void {
     setEmail("");
@@ -55,13 +55,13 @@ export function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" disabled={!email || !password}>
+        <button type="submit" disabled={email === "" || password === ""}>
           Sign in
         </button>
       </form>
-      {error ? (
+      {errors.signIn !== null ? (
         <p style={{ color: "red" }}>
-          {(error as AxiosError).response.data.message}
+          {(errors.signIn as AxiosError).response.data.message}
         </p>
       ) : null}
       <Link to="/signup">Sign up</Link>

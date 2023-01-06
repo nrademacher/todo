@@ -1,32 +1,65 @@
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { AUTH_TOKEN_NAME } from "../constants";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser, signInUser, type UserAuthResponse } from "../api";
+import {
+  type UseMutateAsyncFunction,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  createUser,
+  type CreateUserParams,
+  signInUser,
+  type SignInUserParams,
+  type UserAuthResponse,
+} from "../api";
 
-export function useAuth() {
+interface UseAuthResult {
+  errors: {
+    signUp: unknown;
+    signIn: unknown;
+  };
+  isLoading: boolean;
+  signUp: UseMutateAsyncFunction<
+    UserAuthResponse,
+    unknown,
+    CreateUserParams,
+    unknown
+  >;
+  signIn: UseMutateAsyncFunction<
+    UserAuthResponse,
+    unknown,
+    SignInUserParams,
+    unknown
+  >;
+  getAuthToken: () => string | undefined;
+  isSignedIn: boolean;
+  signOut: () => void;
+}
+
+export function useAuth(): UseAuthResult {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  function handleSignInSuccess(data: UserAuthResponse): void {
+  async function handleSignInSuccess(data: UserAuthResponse): Promise<void> {
     const { token } = data;
     Cookies.set(AUTH_TOKEN_NAME, token);
-    queryClient.invalidateQueries({ queryKey: ["todos"] });
+    await queryClient.invalidateQueries({ queryKey: ["todos"] });
     navigate("/");
   }
 
   const signUp = useMutation({
     mutationFn: createUser,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      handleSignInSuccess(data as UserAuthResponse);
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
+      await handleSignInSuccess(data);
     },
   });
 
   const signIn = useMutation({
     mutationFn: signInUser,
-    onSuccess: (data) => {
-      handleSignInSuccess(data as UserAuthResponse);
+    onSuccess: async (data) => {
+      await handleSignInSuccess(data);
     },
   });
 
@@ -35,7 +68,7 @@ export function useAuth() {
   }
 
   function isSignedIn(): boolean {
-    return !!getAuthToken();
+    return typeof getAuthToken() === "string";
   }
 
   function signOut(): void {
@@ -44,8 +77,8 @@ export function useAuth() {
   }
 
   return {
-    error: signIn.error || signUp.error,
-    isLoading: signIn.isLoading || signUp.error,
+    errors: { signIn: signIn.error, signUp: signUp.error },
+    isLoading: signIn.isLoading || signUp.isLoading,
     signUp: signUp.mutateAsync,
     signIn: signIn.mutateAsync,
     getAuthToken,

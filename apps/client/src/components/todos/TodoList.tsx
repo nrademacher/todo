@@ -4,13 +4,13 @@ import { TodoItem } from "./TodoItem";
 
 export const TodoList: React.FC = () => {
   const { user } = useCurrentUser();
-  const { todos, error, isLoading } = useTodos();
+  const { todos, errors, isLoading } = useTodos();
 
-  if (!todos || !user) {
+  if (todos === null || user === null) {
     return null;
   }
 
-  if (error) {
+  if (errors.queryError !== null) {
     return <div>Error</div>;
   }
 

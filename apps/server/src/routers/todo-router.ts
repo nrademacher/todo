@@ -4,7 +4,13 @@ import {
   type Response,
   Router,
 } from "express";
-import { TodoController } from "../controllers";
+import {
+  createTodo,
+  deleteTodo,
+  getTodoById,
+  getTodos,
+  updateTodo,
+} from "../controllers";
 import { ServerError } from "../utils";
 import { body, param } from "express-validator";
 import { handleError, validate } from "../middlewares";
@@ -13,7 +19,10 @@ const todoRouter = Router();
 
 todoRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await TodoController.getTodos(req.user.id, res);
+    if (req.user == null) {
+      throw new Error("Authorization failure");
+    }
+    await getTodos(req.user.id, res);
   } catch (error) {
     next(new ServerError(error.message));
   }
@@ -23,7 +32,10 @@ todoRouter.get(
   "/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.getTodoById(req.user.id, Number(req.params.id), res);
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await getTodoById(req.user.id, Number(req.params.id), res);
     } catch (error) {
       next(new ServerError(error.message));
     }
@@ -39,7 +51,10 @@ todoRouter.post(
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.createTodo(req.body, req.user.id, res);
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await createTodo(req.body, req.user.id, res);
     } catch (error) {
       next(new ServerError(error.message));
     }
@@ -56,12 +71,10 @@ todoRouter.patch(
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.updateTodo(
-        req.user.id,
-        Number(req.params.id),
-        req.body,
-        res
-      );
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await updateTodo(req.user.id, Number(req.params.id), req.body, res);
     } catch (error) {
       next(new ServerError(error.message));
     }
@@ -73,7 +86,10 @@ todoRouter.delete(
   [param("id").toInt(), validate],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await TodoController.deleteTodo(req.user.id, Number(req.params.id), res);
+      if (req.user == null) {
+        throw new Error("Unexpected authentication failure");
+      }
+      await deleteTodo(req.user.id, Number(req.params.id), res);
     } catch (error) {
       next(new ServerError(error.message));
     }

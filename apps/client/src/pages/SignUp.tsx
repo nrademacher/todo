@@ -4,12 +4,12 @@ import type { CreateUserParams } from "../api";
 import type { AxiosError } from "axios";
 import { Link, Navigate } from "react-router-dom";
 
-export function SignUp() {
+export function SignUp(): JSX.Element {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signUp, isSignedIn, error } = useAuth();
+  const { signUp, isSignedIn, errors } = useAuth();
 
   function resetForm(): void {
     setUsername("");
@@ -66,12 +66,15 @@ export function SignUp() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" disabled={!username || !email || !password}>
+        <button
+          type="submit"
+          disabled={username === "" || email === "" || password === ""}
+        >
           Sign up
         </button>
       </form>
-      {error ? (
-        <p style={{ color: "red" }}>{(error as AxiosError).message}</p>
+      {errors.signUp !== null ? (
+        <p style={{ color: "red" }}>{(errors.signUp as AxiosError).message}</p>
       ) : null}
       <Link to="/auth/signin">Sign in</Link>
     </div>
