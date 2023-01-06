@@ -39,7 +39,7 @@ Here is what you need to be able to run the app locally.
 1. Set up your `.env` file
    - Duplicate `.env.example` to `.env`
    - Use `openssl rand -base64 16` (or `8`, `16`, `24`) to generate keys and add
-     them for `JWT SECRET` and `DB_PASSWORD` in the .env file.
+     them for `JWT_SECRET` and `DB_PASSWORD` in the .env file.
 
 1. Create soft links to your `.env` file in the `server` and `client` apps
 
