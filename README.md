@@ -10,7 +10,7 @@
 
 ### Prerequisites
 
-Here is what you need to be able to run Cal.
+Here is what you need to be able to run the app locally.
 
 - Node.js (latest or LTS)
 - pnpm
