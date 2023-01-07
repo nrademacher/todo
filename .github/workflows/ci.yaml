@@ -5,8 +5,19 @@ on:
   - pull_request
 
 jobs:
-  cache-and-install:
+  install-and-build:
     runs-on: ubuntu-latest
+    environment: Development
+    env:
+      NODE_ENV: development
+      STAGE: testing
+      PORT: 3004
+      DB_PORT: 3307
+      DB_NAME: todo
+      DB_USERNAME: root
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      VITE_API_URL: http://localhost:3004
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,5 +47,9 @@ jobs:
         run: pnpm install
       - name: Lint
         run: pnpm lint
+      - name: Test
+        run: |
+          pnpm db:up
+          pnpm test
       - name: Build
         run: pnpm build
