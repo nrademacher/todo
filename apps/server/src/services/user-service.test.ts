@@ -5,12 +5,12 @@ import type { QueryFailedError } from "typeorm";
 
 describe("userService", () => {
   beforeEach(async () => {
-    await dataSource.initialize();
+    return await dataSource.initialize();
   });
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    await dataSource.destroy();
+    return await dataSource.destroy();
   });
 
   it("creates a user", async () => {

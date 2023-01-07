@@ -11,12 +11,12 @@ import {
 
 describe("todo service", () => {
   beforeEach(async () => {
-    await dataSource.initialize();
+    return await dataSource.initialize();
   });
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    await dataSource.destroy();
+    return await dataSource.destroy();
   });
 
   it("creates a todo for a given user relation", async () => {

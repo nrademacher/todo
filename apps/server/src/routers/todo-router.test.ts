@@ -1,35 +1,57 @@
 import supertest, { type Response } from "supertest";
-import type { CreateTodoParams, UpdateTodoParams } from "../services";
-import { userSignUpRequest } from "./user-router.test";
+import type {
+  CreateTodoParams,
+  CreateUserParams,
+  UpdateTodoParams,
+} from "../services";
 import { app } from "../app";
 import { dataSource, Todo } from "../database";
 import { DeepPartial } from "typeorm";
 
-async function createTodo(userToken: string): Promise<{
-  res: Response;
-  requestBody: CreateTodoParams;
-}> {
-  const requestBody: CreateTodoParams = {
-    description: "Test todo",
-    done: false,
-  };
-  const res = await supertest(app)
-    .post("/todos")
-    .set("Accept", "application/json")
-    .set("Authorization", `Bearer ${userToken}`)
-    .send(requestBody);
-  return { res, requestBody };
-}
-
 describe("todoRouter", () => {
   beforeEach(async () => {
-    await dataSource.initialize();
+    return await dataSource.initialize();
   });
 
   afterEach(async () => {
-    await dataSource.dropDatabase();
-    await dataSource.destroy();
+    if (dataSource.isInitialized) {
+      await dataSource.dropDatabase();
+      return await dataSource.destroy();
+    }
   });
+
+  async function userSignUpRequest(
+    email = "test@testing.com",
+  ): Promise<{ res: Response; requestBody: CreateUserParams }> {
+    const requestBody: CreateUserParams = {
+      username: "Test",
+      email,
+      password: "testing123XYZ!",
+    };
+    const res = await supertest(app)
+      .post("/user")
+      .set("Accept", "application/json")
+      .send(requestBody);
+    return {
+      res,
+      requestBody,
+    };
+  }
+  async function createTodo(userToken: string): Promise<{
+    res: Response;
+    requestBody: CreateTodoParams;
+  }> {
+    const requestBody: CreateTodoParams = {
+      description: "Test todo",
+      done: false,
+    };
+    const res = await supertest(app)
+      .post("/todos")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send(requestBody);
+    return { res, requestBody };
+  }
 
   it("should respond with 401 to unauthorized POST requests to /todos", async () => {
     const requestBody: DeepPartial<Todo> = {

@@ -10,12 +10,12 @@ import { compare } from "bcryptjs";
 
 describe("auth service", () => {
   beforeEach(async () => {
-    await dataSource.initialize();
+    return await dataSource.initialize();
   });
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    await dataSource.destroy();
+    return await dataSource.destroy();
   });
 
   it("creates an auth token for a given user", async () => {
