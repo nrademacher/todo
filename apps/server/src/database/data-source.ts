@@ -8,7 +8,7 @@ const dataSourceOptions: DataSourceOptions = {
   username: config.secrets.db.username,
   password: config.secrets.db.password,
   database: config.secrets.db.name,
-  entities: ["src/database/entities/*.entity.ts"],
+  entities: [`${__dirname}/entities/*.entity{.js,.ts}`],
   migrations: [],
   logging: true,
   synchronize: config.env !== "production",
