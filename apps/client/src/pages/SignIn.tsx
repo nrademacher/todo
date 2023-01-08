@@ -24,6 +24,14 @@ export function SignIn(): JSX.Element {
     resetForm();
   }
 
+  function handleSubmitError(statusCode: number | undefined): string {
+    if (statusCode === 403) {
+      return "Invalid credentials";
+    } else {
+      return "An error occurred while trying to sign you in. Please try again later.";
+    }
+  }
+
   if (isSignedIn) {
     return <Navigate to="/" replace />;
   }
@@ -62,7 +70,7 @@ export function SignIn(): JSX.Element {
       {errors.signIn !== null
         ? (
           <p style={{ color: "red" }}>
-            {(errors.signIn as AxiosError).message}
+            {handleSubmitError((errors.signIn as AxiosError).response?.status)}
           </p>
         )
         : null}
