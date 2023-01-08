@@ -12,6 +12,17 @@ export interface CreateUserResponse {
   token: string;
 }
 
+export class CreateUserError extends Error {
+  public readonly name = "CreateUserError";
+  public readonly statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super();
+    this.message = message;
+    this.statusCode = statusCode;
+  }
+}
+
 export async function getUserById(id: UserId): Promise<User | null> {
   const res = await dataSource.getRepository(User).findOne({
     relations: {
@@ -28,6 +39,12 @@ export async function createUser(
   params: CreateUserParams
 ): Promise<CreateUserResponse> {
   const { password, ...userParams } = params;
+  const existingUser = await dataSource.getRepository(User).findOneBy({
+    email: userParams.email,
+  });
+  if (existingUser !== null) {
+      throw new CreateUserError("User already exists for given email", 409)
+  }
   const passwordHash = await hashPassword(password);
   const user = dataSource.getRepository(User).create({
     ...userParams,

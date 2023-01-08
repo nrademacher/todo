@@ -27,6 +27,16 @@ export function SignUp(): JSX.Element {
     resetForm();
   }
 
+  function handleSubmitError(statusCode: number | undefined): string {
+    if (statusCode === 400) {
+      return "Invalid credentials. Password must be at least 8 characters, contain upper and lower case characters, at least 1 number, and at least 1 special character.";
+    } else if (statusCode === 409) {
+      return "User already exists for given email";
+    } else {
+      return "Invalid credentials";
+    }
+  }
+
   if (isSignedIn) {
     return <Navigate to="/" replace />;
   }
@@ -73,9 +83,13 @@ export function SignUp(): JSX.Element {
           Sign up
         </button>
       </form>
-      {errors.signUp !== null ? (
-        <p style={{ color: "red" }}>{(errors.signUp as AxiosError).message}</p>
-      ) : null}
+      {errors.signUp !== null
+        ? (
+          <p style={{ color: "red" }}>
+            {handleSubmitError((errors.signUp as AxiosError).response?.status)}
+          </p>
+        )
+        : null}
       <Link to="/auth/signin">Sign in</Link>
     </div>
   );

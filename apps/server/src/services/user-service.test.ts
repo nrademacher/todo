@@ -1,7 +1,6 @@
 import { dataSource, User } from "../database";
 import type { CreateUserParams, CreateUserResponse } from "./user-service";
 import * as userService from "./user-service";
-import type { QueryFailedError } from "typeorm";
 
 describe("userService", () => {
   beforeEach(async () => {
@@ -25,7 +24,7 @@ describe("userService", () => {
 
   it("does not create users with duplicate email", async () => {
     let result: CreateUserResponse | undefined;
-    let expectedError: QueryFailedError | undefined;
+    let expectedError: userService.CreateUserError | undefined;
     try {
       await dataSource.getRepository(User).save({
         username: "Test",
@@ -41,7 +40,8 @@ describe("userService", () => {
       expectedError = error;
     }
     expect(result).toBeUndefined();
-    expect(expectedError?.driverError.code).toEqual("ER_DUP_ENTRY");
+    expect(expectedError?.statusCode).toBe(409);
+    expect(expectedError?.message).toEqual("User already exists for given email");
   });
 
   it("gets a single user by id", async () => {
