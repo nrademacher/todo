@@ -3,33 +3,35 @@ import supertest, { type Response } from "supertest";
 import { app } from "../app";
 import type { CreateUserParams, UpdateUserParams } from "../services";
 
-export async function userSignUpRequest(
-  email = "test@testing.com"
-): Promise<{ res: Response; requestBody: CreateUserParams }> {
-  const requestBody: CreateUserParams = {
-    username: "Test",
-    email,
-    password: "testing123XYZ!",
-  };
-  const res = await supertest(app)
-    .post("/user")
-    .set("Accept", "application/json")
-    .send(requestBody);
-  return {
-    res,
-    requestBody,
-  };
-}
-
 describe("userRouter", () => {
   beforeEach(async () => {
-    await dataSource.initialize();
+    return await dataSource.initialize();
   });
 
   afterEach(async () => {
-    await dataSource.dropDatabase();
-    await dataSource.destroy();
+    if (dataSource.isInitialized) {
+      await dataSource.dropDatabase();
+      return await dataSource.destroy();
+    }
   });
+
+  async function userSignUpRequest(
+    email = "test@testing.com",
+  ): Promise<{ res: Response; requestBody: CreateUserParams }> {
+    const requestBody: CreateUserParams = {
+      username: "Test",
+      email,
+      password: "testing123XYZ!",
+    };
+    const res = await supertest(app)
+      .post("/user")
+      .set("Accept", "application/json")
+      .send(requestBody);
+    return {
+      res,
+      requestBody,
+    };
+  }
 
   it("should respond with created user and auth token on valid POST requests to the /users route", async () => {
     const { res, requestBody } = await userSignUpRequest();

@@ -59,11 +59,13 @@ export function SignIn(): JSX.Element {
           Sign in
         </button>
       </form>
-      {errors.signIn !== null ? (
-        <p style={{ color: "red" }}>
-          {(errors.signIn as AxiosError).response.data.message}
-        </p>
-      ) : null}
+      {errors.signIn !== null
+        ? (
+          <p style={{ color: "red" }}>
+            {(errors.signIn as AxiosError).message}
+          </p>
+        )
+        : null}
       <Link to="/signup">Sign up</Link>
     </div>
   );

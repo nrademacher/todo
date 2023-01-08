@@ -4,11 +4,13 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "export STAGE=local && nodemon src/server.ts",
+    "dev": "nodemon src/server.ts",
     "db:drop": "pnpm typeorm-ts-node-esm schema:drop -d ./src/database/data-source.ts",
     "format": "prettier --ignore-path .gitignore \"**/*.+(ts|js|json)\" --write --list-different",
     "lint": "eslint . --fix",
-    "test": "export STAGE=testing && jest --detectOpenHandles"
+    "test": "export STAGE=testing && jest --detectOpenHandles",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js"
   },
   "author": "Nikolay Rademacher",
   "license": "ISC",

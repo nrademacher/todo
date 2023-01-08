@@ -1,5 +1,6 @@
 import { DataSource, type DataSourceOptions } from "typeorm";
 import { config } from "../configs";
+import { join } from "path";
 
 const dataSourceOptions: DataSourceOptions = {
   type: "mysql",
@@ -8,9 +9,9 @@ const dataSourceOptions: DataSourceOptions = {
   username: config.secrets.db.username,
   password: config.secrets.db.password,
   database: config.secrets.db.name,
-  entities: ["src/database/entities/*.entity.ts"],
+  entities: [join(__dirname, "entities/*.entity{.js,.ts}")],
   migrations: [],
-  logging: true,
+  logging: config.stage !== "testing",
   synchronize: config.env !== "production",
 };
 

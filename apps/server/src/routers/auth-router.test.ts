@@ -1,18 +1,35 @@
 import { dataSource } from "../database";
-import type { SignInUserParams } from "../services";
-import supertest from "supertest";
+import type { CreateUserParams, SignInUserParams } from "../services";
+import supertest, { Response } from "supertest";
 import { app } from "../app";
-import { userSignUpRequest } from "./user-router.test";
 
 describe("authRouter", () => {
   beforeEach(async () => {
-    await dataSource.initialize();
+    return await dataSource.initialize();
   });
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    await dataSource.destroy();
+    return await dataSource.destroy();
   });
+
+  async function userSignUpRequest(
+    email = "test@testing.com",
+  ): Promise<{ res: Response; requestBody: CreateUserParams }> {
+    const requestBody: CreateUserParams = {
+      username: "Test",
+      email,
+      password: "testing123XYZ!",
+    };
+    const res = await supertest(app)
+      .post("/user")
+      .set("Accept", "application/json")
+      .send(requestBody);
+    return {
+      res,
+      requestBody,
+    };
+  }
 
   it("should respond with appropriate status and error(s) on invalid body param(s) in POST requests to /user", async () => {
     const requestBody: SignInUserParams = {
@@ -44,7 +61,7 @@ describe("authRouter", () => {
 
   it("should respond with 403 to POST requests to the /auth/signin with invalid email credential", async () => {
     const { requestBody: signUpReqBody } = await userSignUpRequest(
-      "test@test.com"
+      "test@test.com",
     );
     const requestBody: SignInUserParams = {
       email: "not@found.com",
