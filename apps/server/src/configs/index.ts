@@ -31,7 +31,7 @@ const stage = env.get("STAGE").required().asString();
 
 const baseConfig: Config = {
   stage,
-  env: env.get("NODE_ENV").required().asString(),
+  env: env.get("NODE_ENV").default("development").asString(),
   port: env.get("PORT").default(3009).asInt(),
   secrets: {
     jwt: env.get("JWT_SECRET").required().asString(),
