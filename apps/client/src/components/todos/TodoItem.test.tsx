@@ -33,7 +33,7 @@ describe("TodoItem", () => {
     const todo = TODO;
     const id = nanoid();
     const todoItem = renderTodo(todo, id);
-    const todoDescription = await todoItem.findByTestId(id + "-label");
+    const todoDescription = await todoItem.findByRole("todo-description");
     expect(todoDescription.innerText).toEqual(todo.description);
     todoItem.unmount();
   });
@@ -43,7 +43,8 @@ describe("TodoItem", () => {
     const id = nanoid();
     const todoItem = renderTodo(uncheckedTodo, id);
     const todoCheckbox = await todoItem.findByTestId(id + "-input");
-    expect((todoCheckbox as HTMLInputElement).checked).toBe(false);
+    console.log("TODO CHECKBOX", todoCheckbox);
+    expect((todoCheckbox.firstChild as HTMLInputElement).checked).toBe(false);
     todoItem.unmount();
   });
 
@@ -52,7 +53,7 @@ describe("TodoItem", () => {
     const id = nanoid();
     const todoItem = renderTodo(checkedTodo, id);
     const todoCheckbox = await todoItem.findByTestId(id + "-input");
-    expect((todoCheckbox as HTMLInputElement).checked).toBe(true);
+    expect((todoCheckbox.firstChild as HTMLInputElement).checked).toBe(true);
     todoItem.unmount();
   });
 });

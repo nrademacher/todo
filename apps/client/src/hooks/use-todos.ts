@@ -56,7 +56,10 @@ export function useTodos(): UseTodosResult {
 
   const remove = useMutation({
     mutationFn: deleteTodo,
-    onSuccess: onMutationSuccess,
+    onSuccess: async () => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      setTimeout(onMutationSuccess, 500);
+    },
   });
 
   return {

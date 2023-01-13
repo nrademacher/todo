@@ -1,5 +1,8 @@
 import { useCurrentUser, useTodos } from "../../hooks";
 import { nanoid } from "nanoid";
+
+import List from "@mui/material/List";
+
 import { TodoItem } from "./TodoItem";
 
 export const TodoList: React.FC = () => {
@@ -19,15 +22,14 @@ export const TodoList: React.FC = () => {
   }
 
   return (
-    <ol>
-      {todos.map((todo) => {
-        const localId = nanoid();
-        return (
-          <li key={localId}>
-            <TodoItem localId={localId} todo={todo} />
-          </li>
-        );
-      })}
-    </ol>
+    <>
+      <h2>Todos</h2>
+      <List>
+        {todos.map((todo) => {
+          const localId = nanoid();
+          return <TodoItem key={localId} localId={localId} todo={todo} />;
+        })}
+      </List>
+    </>
   );
 };

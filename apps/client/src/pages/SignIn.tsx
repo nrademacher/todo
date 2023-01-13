@@ -3,6 +3,10 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { SignInUserParams } from "../api";
 import { useAuth } from "../hooks";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export function SignIn(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -37,7 +41,7 @@ export function SignIn(): JSX.Element {
   }
 
   return (
-    <div>
+    <Container>
       <h1>Sign In</h1>
       <form
         onSubmit={async (e) => {
@@ -45,36 +49,48 @@ export function SignIn(): JSX.Element {
           await handleSignIn();
         }}
       >
-        <div>
-          <label htmlFor="email-input">Email</label>
-          <input
-            id="email-input"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password-input">Password</label>
-          <input
-            id="password-input"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" disabled={email === "" || password === ""}>
-          Sign in
-        </button>
+        <Grid container spacing={2} direction="column">
+          <Grid xs={12} sm={8} md={4}>
+            <TextField
+              label="Email"
+              id="email-input"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid xs={12} sm={8} md={4}>
+            <TextField
+              label="Password"
+              id="password-input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid xs={12} sm={8} md={4}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={email === "" || password === ""}
+            >
+              Sign in
+            </Button>
+          </Grid>
+          <Grid xs={12} sm={8} md={4}>
+            <Link to="/signup">
+              <Button>Sign up</Button>
+            </Link>
+          </Grid>
+        </Grid>
       </form>
-      {errors.signIn !== null
-        ? (
-          <p style={{ color: "red" }}>
-            {handleSubmitError((errors.signIn as AxiosError).response?.status)}
-          </p>
-        )
-        : null}
-      <Link to="/signup">Sign up</Link>
-    </div>
+      {errors.signIn !== null ? (
+        <p style={{ color: "red" }}>
+          {handleSubmitError((errors.signIn as AxiosError).response?.status)}
+        </p>
+      ) : null}
+    </Container>
   );
 }
