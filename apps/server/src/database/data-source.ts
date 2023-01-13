@@ -14,7 +14,7 @@ const dataSourceOptions: DataSourceOptions = {
   logging: config.stage !== "testing",
   synchronize: config.env !== "production",
   ssl: {
-    rejectUnauthorized: config.env === "production",
+    rejectUnauthorized: true,
   },
 };
 
