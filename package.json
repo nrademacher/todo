@@ -18,7 +18,10 @@
     "test": "pnpm test:server && pnpm test:client",
     "build:server": "pnpm --filter server build",
     "build:client": "pnpm --filter client build",
-    "build": "pnpm build:server && pnpm build:client"
+    "build": "pnpm build:server && pnpm build:client",
+    "start:server": "pnpm --filter server start",
+    "start:client": "pnpm --filter client start",
+    "start": "concurrently \"pnpm start:server\" \"pnpm start:client\""
   },
   "keywords": [],
   "author": "Nikolay Rademacher",
