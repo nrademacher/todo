@@ -13,9 +13,6 @@ const dataSourceOptions: DataSourceOptions = {
   migrations: [join(__dirname, "migrations/*{.js,.ts}")],
   logging: config.stage !== "testing",
   synchronize: config.env !== "production",
-  ssl: {
-    rejectUnauthorized: config.env === "production",
-  },
 };
 
 export const dataSource = new DataSource(dataSourceOptions);
