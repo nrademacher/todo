@@ -1,7 +1,5 @@
 import type { EnvConfig } from ".";
 
-const prodConfig: EnvConfig = {
-  port: Number(process.env.PORT),
-};
+const prodConfig: EnvConfig = {};
 
 export default prodConfig;
