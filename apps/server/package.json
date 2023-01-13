@@ -10,7 +10,7 @@
     "lint": "eslint . --fix",
     "test": "export STAGE=testing && jest --detectOpenHandles",
     "build": "tsc -p tsconfig.json",
-    "start": "typeorm migration:run -d ./dist/database/data-source.js && node dist/server.js"
+    "start": "typeorm migration:run -d ./dist/database/data-source.js && NODE_ENV=production node dist/server.js"
   },
   "author": "Nikolay Rademacher",
   "license": "ISC",
