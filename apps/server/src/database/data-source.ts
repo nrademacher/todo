@@ -10,7 +10,7 @@ const dataSourceOptions: DataSourceOptions = {
   password: config.secrets.db.password,
   database: config.secrets.db.name,
   entities: [join(__dirname, "entities/*.entity{.js,.ts}")],
-  migrations: [],
+  migrations: [join(__dirname, "migrations/*.{.js,.ts}")],
   logging: config.stage !== "testing",
   synchronize: config.env !== "production",
 };
