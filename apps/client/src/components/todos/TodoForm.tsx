@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useTodos } from "../../hooks";
 
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+
 export const TodoForm: React.FC = () => {
   const [todoDescription, setTodoDescription] = useState("");
   const { isLoading, add } = useTodos();
@@ -24,13 +28,20 @@ export const TodoForm: React.FC = () => {
         await handleCreate();
       }}
     >
-      <input
-        value={todoDescription}
-        onChange={(e) => setTodoDescription(e.target.value)}
-      />
-      <button type="submit" disabled={todoDescription === ""}>
-        Create Todo
-      </button>
+      <Stack direction="row" spacing={1}>
+        <TextField
+          label="New Todo"
+          value={todoDescription}
+          onChange={(e) => setTodoDescription(e.target.value)}
+        />
+        <Button
+          variant="contained"
+          type="submit"
+          disabled={todoDescription === ""}
+        >
+          Create Todo
+        </Button>
+      </Stack>
     </form>
   );
 };
