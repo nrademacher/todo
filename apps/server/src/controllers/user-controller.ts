@@ -8,7 +8,7 @@ export async function getUserById(id: UserId, res: Response): Promise<void> {
     throw new Error("User not found");
   }
   const { passwordHash, ...result } = user;
-  res.send(result);
+  res.json(result);
 }
 
 export async function createUser(
@@ -20,7 +20,7 @@ export async function createUser(
     const { passwordHash, ...sanitizedUser } = createResult.user;
     res.json({ token: createResult.token, user: sanitizedUser });
   } catch (e) {
-    res.status(typeof e.statusCode === "number" ? e.statusCode : 400);
+    res.sendStatus(typeof e.statusCode === "number" ? e.statusCode : 400);
     res.json({ message: e.message });
   }
 }
@@ -35,10 +35,10 @@ export async function updateUser(
     throw new Error("User not found");
   }
   const { passwordHash, ...result } = user;
-  res.send(result);
+  res.json(result);
 }
 
 export async function deleteUser(id: UserId, res: Response): Promise<void> {
   const result = userService.deleteUser(id);
-  res.send(result);
+  res.json(result);
 }

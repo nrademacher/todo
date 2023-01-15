@@ -9,7 +9,7 @@ import * as todoService from "../services/todo-service";
 
 export async function getTodos(reqId: UserId, res: Response): Promise<void> {
   const todos = await todoService.getTodos(reqId);
-  res.send(todos);
+  res.json(todos);
 }
 
 export async function getTodoById(
@@ -19,14 +19,14 @@ export async function getTodoById(
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
-    res.sendStatus(404);
+    res.sendStatus(404).end();
     return;
   }
   if (reqId !== todo.user.id) {
-    res.sendStatus(403);
+    res.sendStatus(403).end();
     return;
   }
-  res.send(todo);
+  res.json(todo);
 }
 
 export async function createTodo(
@@ -35,7 +35,7 @@ export async function createTodo(
   res: Response
 ): Promise<void> {
   const todo = await todoService.createTodo(userId, params);
-  res.send(todo);
+  res.json(todo);
 }
 
 export async function updateTodo(
@@ -46,15 +46,15 @@ export async function updateTodo(
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
-    res.sendStatus(404);
+    res.sendStatus(404).end();
     return;
   }
   if (reqId !== todo.user.id) {
-    res.sendStatus(403);
+    res.sendStatus(403).end();
     return;
   }
   const updatedTodo = await todoService.updateTodo(todo.id, params);
-  res.send(updatedTodo);
+  res.json(updatedTodo);
 }
 
 export async function deleteTodo(
@@ -64,13 +64,13 @@ export async function deleteTodo(
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
-    res.sendStatus(404);
+    res.sendStatus(404).end();
     return;
   }
   if (reqId !== todo.user.id) {
-    res.sendStatus(403);
+    res.sendStatus(403).end();
     return;
   }
   const result = todoService.deleteTodo(todo.id);
-  res.send(result);
+  res.json(result);
 }
