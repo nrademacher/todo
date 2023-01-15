@@ -8,16 +8,17 @@ import Stack from "@mui/material/Stack";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
   localId,
   todo,
 }) => {
-  const { update, remove } = useTodos();
+  const { isLoading, update, remove } = useTodos();
 
   async function handleCheckedChange(
     todoId: TodoId,
-    checked: boolean
+    checked: boolean,
   ): Promise<void> {
     const updateTodoParams = {
       done: checked,
@@ -37,19 +38,20 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
           sx={{ alignItems: "center", justifyContent: "space-between" }}
         >
           <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            <Checkbox
-              id={localId}
-              data-testid={localId + "-input"}
-              role="todo-checkbox"
-              onChange={async (e) =>
-                await handleCheckedChange(todo.id, e.target.checked)
-              }
-              edge="start"
-              checked={todo.done}
-              tabIndex={-1}
-              disableRipple
-              inputProps={{ "aria-labelledby": localId + "-label" }}
-            />
+            {isLoading ? <CircularProgress /> : (
+              <Checkbox
+                id={localId}
+                data-testid={localId + "-input"}
+                role="todo-checkbox"
+                onChange={async (e) =>
+                  await handleCheckedChange(todo.id, e.target.checked)}
+                edge="start"
+                checked={todo.done}
+                tabIndex={-1}
+                disableRipple
+                inputProps={{ "aria-labelledby": localId + "-label" }}
+              />
+            )}
             <ListItemText
               id={localId + "-label"}
               primary={todo.description}
