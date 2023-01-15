@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 
 export const TodoForm: React.FC = () => {
   const [todoDescription, setTodoDescription] = useState("");
-  const { isLoading, add } = useTodos();
+  const { isQueryLoading, add } = useTodos();
 
   async function handleCreate(): Promise<void> {
     const newTodoParams = {
@@ -18,7 +18,7 @@ export const TodoForm: React.FC = () => {
     await add(newTodoParams);
   }
 
-  if (isLoading) {
+  if (isQueryLoading) {
     return <CircularProgress />;
   }
 
