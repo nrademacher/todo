@@ -43,7 +43,7 @@ export async function createUser(
     email: userParams.email,
   });
   if (existingUser !== null) {
-      throw new CreateUserError("User already exists for given email", 409)
+    throw new CreateUserError("User already exists for given email", 409);
   }
   const passwordHash = await hashPassword(password);
   const user = dataSource.getRepository(User).create({

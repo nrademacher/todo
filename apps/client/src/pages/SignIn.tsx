@@ -3,16 +3,19 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { SignInUserParams } from "../api";
 import { useAuth } from "../hooks";
+
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 
-export function SignIn(): JSX.Element {
+import { PageLoadingSpinner } from "../components";
+
+export default function SignIn(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isSignedIn, signIn, errors } = useAuth();
+  const { isLoading, isSignedIn, signIn, errors } = useAuth();
 
   function resetForm(): void {
     setEmail("");
@@ -34,6 +37,10 @@ export function SignIn(): JSX.Element {
     } else {
       return "An error occurred while trying to sign you in. Please try again later.";
     }
+  }
+
+  if (isLoading) {
+    return <PageLoadingSpinner />;
   }
 
   if (isSignedIn) {

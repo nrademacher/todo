@@ -9,7 +9,7 @@ describe("userService", () => {
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    return await dataSource.destroy();
+    await dataSource.destroy();
   });
 
   it("creates a user", async () => {
@@ -41,7 +41,9 @@ describe("userService", () => {
     }
     expect(result).toBeUndefined();
     expect(expectedError?.statusCode).toBe(409);
-    expect(expectedError?.message).toEqual("User already exists for given email");
+    expect(expectedError?.message).toEqual(
+      "User already exists for given email"
+    );
   });
 
   it("gets a single user by id", async () => {

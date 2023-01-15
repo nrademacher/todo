@@ -13,7 +13,7 @@ export async function getUserById(id: UserId, res: Response): Promise<void> {
 
 export async function createUser(
   params: CreateUserParams,
-  res: Response,
+  res: Response
 ): Promise<void> {
   try {
     const createResult = await userService.createUser(params);
@@ -28,7 +28,7 @@ export async function createUser(
 export async function updateUser(
   id: UserId,
   params: UpdateUserParams,
-  res: Response,
+  res: Response
 ): Promise<void> {
   const user = await userService.updateUser(id, params);
   if (user == null) {

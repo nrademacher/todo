@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "es5",
-      "es6",
-      "dom"
-    ],
+    "lib": ["es5", "es6", "dom"],
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -13,13 +9,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
-    "types": [
-      "express",
-      "@types/jest"
-    ],
-    "typeRoots": [
-      "./src/types"
-    ],
+    "types": ["express", "@types/jest"],
+    "typeRoots": ["./src/types"],
     "outDir": "dist"
   }
 }
