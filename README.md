@@ -2,7 +2,7 @@
   <h3 align="center">☑️  Todo (WIP)</h3>
 
 <p align="center">
-    Featurefull Todo App to end all todo apps.
+    Full-stack Todo app
   </p>
 </p>
 
