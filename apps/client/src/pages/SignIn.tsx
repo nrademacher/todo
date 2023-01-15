@@ -135,15 +135,13 @@ export default function SignIn(): JSX.Element {
                 Sign in
               </Button>
             </Stack>
-            {errors.signIn !== null
-              ? (
-                <ErrorAlert
-                  message={createErrorMessage(
-                    (errors.signIn as AxiosError).response?.status,
-                  )}
-                />
-              )
-              : null}
+            {errors.signIn !== null ? (
+              <ErrorAlert
+                message={createErrorMessage(
+                  (errors.signIn as AxiosError).response?.status
+                )}
+              />
+            ) : null}
             <Box>
               Need an account?{" "}
               <RouterLink to="/signup" style={{ textDecoration: "none" }}>

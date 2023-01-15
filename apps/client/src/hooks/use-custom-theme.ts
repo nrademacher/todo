@@ -50,7 +50,7 @@ export function useCustomTheme(): Theme {
           },
         },
       }),
-    [prefersDarkMode],
+    [prefersDarkMode]
   );
 
   return theme;

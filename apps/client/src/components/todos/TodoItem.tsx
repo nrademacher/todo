@@ -21,7 +21,7 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
 
   async function handleCheckedChange(
     todoId: TodoId,
-    checked: boolean,
+    checked: boolean
   ): Promise<void> {
     const updateTodoParams = {
       done: checked,
@@ -47,7 +47,8 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
                 data-testid={localId + "-input"}
                 role="todo-checkbox"
                 onChange={async (e) =>
-                  await handleCheckedChange(todo.id, e.target.checked)}
+                  await handleCheckedChange(todo.id, e.target.checked)
+                }
                 edge="start"
                 checked={todo.done}
                 tabIndex={-1}
