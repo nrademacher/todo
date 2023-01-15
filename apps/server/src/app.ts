@@ -3,10 +3,12 @@ import morgan from "morgan";
 import cors from "cors";
 import { appRouter } from "./routers";
 import { handleError } from "./middlewares";
+import { config } from "./configs";
 
 const app = express();
 
-app.use(morgan("dev"));
+const logFormat = config.env !== "production" ? "dev" : "combined"
+app.use(morgan(logFormat));
 
 app.use(cors());
 
