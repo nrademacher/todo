@@ -10,11 +10,11 @@ describe("authRouter", () => {
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    return await dataSource.destroy();
+    await dataSource.destroy();
   });
 
   async function userSignUpRequest(
-    email = "test@testing.com",
+    email = "test@testing.com"
   ): Promise<{ res: Response; requestBody: CreateUserParams }> {
     const requestBody: CreateUserParams = {
       username: "Test",
@@ -61,7 +61,7 @@ describe("authRouter", () => {
 
   it("should respond with 403 to POST requests to the /auth/signin with invalid email credential", async () => {
     const { requestBody: signUpReqBody } = await userSignUpRequest(
-      "test@test.com",
+      "test@test.com"
     );
     const requestBody: SignInUserParams = {
       email: "not@found.com",

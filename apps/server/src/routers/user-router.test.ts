@@ -11,12 +11,12 @@ describe("userRouter", () => {
   afterEach(async () => {
     if (dataSource.isInitialized) {
       await dataSource.dropDatabase();
-      return await dataSource.destroy();
+      await dataSource.destroy();
     }
   });
 
   async function userSignUpRequest(
-    email = "test@testing.com",
+    email = "test@testing.com"
   ): Promise<{ res: Response; requestBody: CreateUserParams }> {
     const requestBody: CreateUserParams = {
       username: "Test",

@@ -3,29 +3,20 @@ import { useAuth } from "../hooks";
 import type { CreateUserParams } from "../api";
 import type { AxiosError } from "axios";
 import { Link, Navigate } from "react-router-dom";
+import { PageLoadingSpinner, PrereleaseDisclaimer } from "../components";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Unstable_Grid2";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 
-const PrereleaseDisclaimer: React.FC = () => (
-  <Alert severity="warning">
-    <AlertTitle>Disclaimer</AlertTitle>
-    This is an early pre-release version of Todo. Fundamental changes and loss
-    of user data may occur at any time without notice.
-  </Alert>
-);
-
-export function SignUp(): JSX.Element {
+export default function SignUp(): JSX.Element {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signUp, isSignedIn, errors } = useAuth();
+  const { signUp, isSignedIn, errors, isLoading } = useAuth();
 
   function resetForm(): void {
     setUsername("");
@@ -51,6 +42,10 @@ export function SignUp(): JSX.Element {
     } else {
       return "Invalid credentials";
     }
+  }
+
+  if (isLoading) {
+    return <PageLoadingSpinner />;
   }
 
   if (isSignedIn) {
@@ -116,13 +111,11 @@ export function SignUp(): JSX.Element {
           </Grid>
         </form>
       </Stack>
-      {errors.signUp !== null
-        ? (
-          <p style={{ color: "red" }}>
-            {handleSubmitError((errors.signUp as AxiosError).response?.status)}
-          </p>
-        )
-        : null}
+      {errors.signUp !== null ? (
+        <p style={{ color: "red" }}>
+          {handleSubmitError((errors.signUp as AxiosError).response?.status)}
+        </p>
+      ) : null}
     </Container>
   );
 }

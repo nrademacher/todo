@@ -1,12 +1,18 @@
 import { useAuth, useCurrentUser } from "../hooks";
+
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { TodoForm, TodoList } from "../components";
 
-export function Home(): JSX.Element {
-  const { user } = useCurrentUser();
-  const { signOut } = useAuth();
+import { PageLoadingSpinner, TodoForm, TodoList } from "../components";
+
+export default function Home(): JSX.Element {
+  const { user, isLoading: isUserLoading } = useCurrentUser();
+  const { signOut, isLoading: isAuthLoading } = useAuth();
+
+  if (isUserLoading || isAuthLoading) {
+    return <PageLoadingSpinner />;
+  }
 
   return (
     <Container>

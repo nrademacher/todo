@@ -15,7 +15,7 @@ describe("auth service", () => {
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    return await dataSource.destroy();
+    await dataSource.destroy();
   });
 
   it("creates an auth token for a given user", async () => {

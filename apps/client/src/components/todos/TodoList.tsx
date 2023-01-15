@@ -1,7 +1,7 @@
 import { useCurrentUser, useTodos } from "../../hooks";
 import { nanoid } from "nanoid";
 
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 
 import { TodoItem } from "./TodoItem";
@@ -19,7 +19,7 @@ export const TodoList: React.FC = () => {
   }
 
   if (isLoading) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
 
   return (

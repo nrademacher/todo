@@ -16,7 +16,7 @@ describe("todo service", () => {
 
   afterEach(async () => {
     await dataSource.dropDatabase();
-    return await dataSource.destroy();
+    await dataSource.destroy();
   });
 
   it("creates a todo for a given user relation", async () => {

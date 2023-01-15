@@ -1,11 +1,17 @@
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { ProtectedRoute } from "./components";
-import { Home, SignIn, SignUp } from "./pages";
+
+const Home = lazy(async () => await import("./pages/Home"));
+const SignIn = lazy(async () => await import("./pages/SignIn"));
+const SignUp = lazy(async () => await import("./pages/SignUp"));
 
 const queryClient = new QueryClient();
 
@@ -23,24 +29,39 @@ export function App(): JSX.Element {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/auth/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Routes>
+          <Suspense
+            fallback={
+              <Box
+                sx={{
+                  display: "grid",
+                  placeContent: "center",
+                  minHeight: "100vh",
+                  minWidth: "100vw",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/auth/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
