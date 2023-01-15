@@ -43,7 +43,6 @@ describe("TodoItem", () => {
     const id = nanoid();
     const todoItem = renderTodo(uncheckedTodo, id);
     const todoCheckbox = await todoItem.findByTestId(id + "-input");
-    console.log("TODO CHECKBOX", todoCheckbox);
     expect((todoCheckbox.firstChild as HTMLInputElement).checked).toBe(false);
     todoItem.unmount();
   });

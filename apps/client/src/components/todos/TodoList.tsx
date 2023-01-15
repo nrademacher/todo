@@ -23,14 +23,14 @@ export const TodoList: React.FC = () => {
   }
 
   return (
-    <>
+    <div style={{ width: "100%" }}>
       <h2>Todos</h2>
-      <List>
+      <List sx={{ width: "100%" }}>
         {todos.map((todo) => {
           const localId = nanoid();
           return <TodoItem key={localId} localId={localId} todo={todo} />;
         })}
       </List>
-    </>
+    </div>
   );
 };

@@ -1,21 +1,27 @@
-import { AxiosError } from "axios";
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import { SignInUserParams } from "../api";
 import { useAuth } from "../hooks";
+import { useTheme } from "@mui/material";
+import type { SignInUserParams } from "../api";
+import { Link as RouterLink, Navigate } from "react-router-dom";
+import type { AxiosError } from "axios";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Unstable_Grid2";
+import Link from "@mui/material/Link";
 
-import { PageLoadingSpinner } from "../components";
+import { ErrorAlert, PageLoadingSpinner } from "../components";
+import { APP_NAME } from "../constants";
 
 export default function SignIn(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { isLoading, isSignedIn, signIn, errors } = useAuth();
+
+  const theme = useTheme();
 
   function resetForm(): void {
     setEmail("");
@@ -31,12 +37,21 @@ export default function SignIn(): JSX.Element {
     resetForm();
   }
 
-  function handleSubmitError(statusCode: number | undefined): string {
+  function createErrorMessage(statusCode: number | undefined): {
+    title: string;
+    description: string;
+  } {
+    let title;
+    let description;
     if (statusCode === 403) {
-      return "Invalid credentials";
+      title = "Invalid credentials";
+      description = "Your email or password was incorrect";
     } else {
-      return "An error occurred while trying to sign you in. Please try again later.";
+      title = "Error";
+      description =
+        "An error occurred while trying to sign you in. Please try again later.";
     }
+    return { title, description };
   }
 
   if (isLoading) {
@@ -48,56 +63,96 @@ export default function SignIn(): JSX.Element {
   }
 
   return (
-    <Container>
-      <h1>Sign In</h1>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await handleSignIn();
+    <Container maxWidth="xs">
+      <Stack
+        sx={{
+          width: "100%",
+          margin: "auto",
+          alignItems: "center",
+          paddingTop: "4rem",
         }}
       >
-        <Grid container spacing={2} direction="column">
-          <Grid xs={12} sm={8} md={4}>
-            <TextField
-              label="Email"
-              id="email-input"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={8} md={4}>
-            <TextField
-              label="Password"
-              id="password-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={8} md={4}>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={email === "" || password === ""}
+        <header>
+          <Stack sx={{ alignItems: "center" }}>
+            <Box sx={{ fontSize: "4em" }}>☑️</Box>
+            <h1>Sign in to {APP_NAME}</h1>
+          </Stack>
+        </header>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await handleSignIn();
+          }}
+          style={{ width: "100%" }}
+        >
+          <Stack spacing={2} sx={{ alignItems: "center" }}>
+            <Stack
+              spacing={2}
+              sx={{ width: "100%" }}
+              border={1}
+              borderColor="border.tertiary"
+              borderRadius={1}
+              padding={3}
+              bgcolor="background.secondary"
             >
-              Sign in
-            </Button>
-          </Grid>
-          <Grid xs={12} sm={8} md={4}>
-            <Link to="/signup">
-              <Button>Sign up</Button>
-            </Link>
-          </Grid>
-        </Grid>
-      </form>
-      {errors.signIn !== null ? (
-        <p style={{ color: "red" }}>
-          {handleSubmitError((errors.signIn as AxiosError).response?.status)}
-        </p>
-      ) : null}
+              <TextField
+                label="Email"
+                id="email-input"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                sx={{
+                  "& .MuiInputBase-root": {
+                    "& > fieldset": {
+                      borderColor: theme.palette.border.tertiary,
+                    },
+                  },
+                  bgcolor: theme.palette.background.input,
+                }}
+              />
+              <TextField
+                label="Password"
+                id="password-input"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                sx={{
+                  "& .MuiInputBase-root": {
+                    "& > fieldset": {
+                      borderColor: theme.palette.border.tertiary,
+                    },
+                  },
+                  bgcolor: theme.palette.background.input,
+                }}
+              />
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={email === "" || password === ""}
+              >
+                Sign in
+              </Button>
+            </Stack>
+            {errors.signIn !== null ? (
+              <ErrorAlert
+                message={createErrorMessage(
+                  (errors.signIn as AxiosError).response?.status
+                )}
+              />
+            ) : null}
+            <Box>
+              Need an account?{" "}
+              <RouterLink to="/signup" style={{ textDecoration: "none" }}>
+                <Link underline="hover" component="span">
+                  Sign up
+                </Link>
+              </RouterLink>
+            </Box>
+          </Stack>
+        </form>
+      </Stack>
     </Container>
   );
 }

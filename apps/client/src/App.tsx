@@ -1,13 +1,10 @@
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { lazy, Suspense, useMemo } from "react";
-import CssBaseline from "@mui/material/CssBaseline";
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useCustomTheme } from "./hooks";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-
-import { ProtectedRoute } from "./components";
+import { PageLoadingSpinner, ProtectedRoute } from "./components";
 
 const Home = lazy(async () => await import("./pages/Home"));
 const SignIn = lazy(async () => await import("./pages/SignIn"));
@@ -16,37 +13,14 @@ const SignUp = lazy(async () => await import("./pages/SignUp"));
 const queryClient = new QueryClient();
 
 export function App(): JSX.Element {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: prefersDarkMode ? "dark" : "light",
-        },
-      }),
-    [prefersDarkMode]
-  );
+  const customTheme = useCustomTheme();
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={customTheme}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Suspense
-            fallback={
-              <Box
-                sx={{
-                  display: "grid",
-                  placeContent: "center",
-                  minHeight: "100vh",
-                  minWidth: "100vw",
-                }}
-              >
-                <CircularProgress />
-              </Box>
-            }
-          >
+          <Suspense fallback={<PageLoadingSpinner />}>
             <Routes>
               <Route
                 path="/"

@@ -29,16 +29,18 @@ export const TodoForm: React.FC = () => {
         await handleCreate();
       }}
     >
-      <Stack direction="row" spacing={1}>
+      <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
         <TextField
           label="New Todo"
           value={todoDescription}
           onChange={(e) => setTodoDescription(e.target.value)}
+          sx={{ width: "75%" }}
         />
         <Button
           variant="contained"
           type="submit"
           disabled={todoDescription === ""}
+          sx={{ width: "25%" }}
         >
           Create Todo
         </Button>

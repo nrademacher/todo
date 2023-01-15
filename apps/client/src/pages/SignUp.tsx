@@ -1,22 +1,32 @@
 import { useState } from "react";
 import { useAuth } from "../hooks";
+import { useTheme } from "@mui/material";
 import type { CreateUserParams } from "../api";
+import { Link as RouterLink, Navigate } from "react-router-dom";
 import type { AxiosError } from "axios";
-import { Link, Navigate } from "react-router-dom";
-import { PageLoadingSpinner, PrereleaseDisclaimer } from "../components";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
-import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+
+import { APP_NAME } from "../constants";
+import {
+  ErrorAlert,
+  PageLoadingSpinner,
+  PrereleaseDisclaimer,
+} from "../components";
 
 export default function SignUp(): JSX.Element {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signUp, isSignedIn, errors, isLoading } = useAuth();
+  const { isLoading, signUp, isSignedIn, errors } = useAuth();
+
+  const theme = useTheme();
 
   function resetForm(): void {
     setUsername("");
@@ -34,14 +44,25 @@ export default function SignUp(): JSX.Element {
     resetForm();
   }
 
-  function handleSubmitError(statusCode: number | undefined): string {
+  function createErrorMessage(statusCode: number | undefined): {
+    title: string;
+    description: string;
+  } {
+    let title;
+    let description;
     if (statusCode === 400) {
-      return "Invalid credentials. Password must be at least 8 characters, contain upper and lower case characters, at least 1 number, and at least 1 special character.";
+      title = "Insufficient password strength";
+      description =
+        "Password must be at least 8 characters, contain upper and lower case characters, at least 1 number, and at least 1 special character.";
     } else if (statusCode === 409) {
-      return "User already exists for given email";
+      title = "User exists";
+      description = "A user already exists for the email address you provided.";
     } else {
-      return "Invalid credentials";
+      title = "Error";
+      description =
+        "Sorry, an internal error occurred while trying to sign you up. Please try again later.";
     }
+    return { title, description };
   }
 
   if (isLoading) {
@@ -53,18 +74,39 @@ export default function SignUp(): JSX.Element {
   }
 
   return (
-    <Container>
-      <h1>Sign Up</h1>
-      <Stack sx={{ width: "100%" }} spacing={2}>
-        <PrereleaseDisclaimer />
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await handleSignUp();
-          }}
-        >
-          <Grid container spacing={2} direction="column">
-            <Grid xs={12} sm={8} md={4}>
+    <Container maxWidth="xs">
+      <Stack
+        sx={{
+          width: "100%",
+          margin: "auto",
+          alignItems: "center",
+          paddingTop: "4rem",
+        }}
+      >
+        <header>
+          <Stack sx={{ alignItems: "center" }}>
+            <Box sx={{ fontSize: "4em" }}>☑️</Box>
+            <h1>Sign up for {APP_NAME}</h1>
+          </Stack>
+        </header>
+        <Stack spacing={2} sx={{ alignItems: "center" }}>
+          <PrereleaseDisclaimer />
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await handleSignUp();
+            }}
+            style={{ width: "100%" }}
+          >
+            <Stack
+              spacing={2}
+              sx={{ width: "100%" }}
+              border={1}
+              borderColor="border.tertiary"
+              borderRadius={1}
+              padding={3}
+              bgcolor="background.secondary"
+            >
               <TextField
                 label="Username"
                 id="username-input"
@@ -72,9 +114,15 @@ export default function SignUp(): JSX.Element {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 fullWidth
+                sx={{
+                  "& .MuiInputBase-root": {
+                    "& > fieldset": {
+                      borderColor: theme.palette.border.tertiary,
+                    },
+                  },
+                  bgcolor: theme.palette.background.input,
+                }}
               />
-            </Grid>
-            <Grid xs={12} sm={8} md={4}>
               <TextField
                 label="Email"
                 id="email-input"
@@ -82,9 +130,15 @@ export default function SignUp(): JSX.Element {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
+                sx={{
+                  "& .MuiInputBase-root": {
+                    "& > fieldset": {
+                      borderColor: theme.palette.border.tertiary,
+                    },
+                  },
+                  bgcolor: theme.palette.background.input,
+                }}
               />
-            </Grid>
-            <Grid xs={12} sm={8} md={4}>
               <TextField
                 label="Password"
                 id="password-input"
@@ -92,9 +146,15 @@ export default function SignUp(): JSX.Element {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 fullWidth
+                sx={{
+                  "& .MuiInputBase-root": {
+                    "& > fieldset": {
+                      borderColor: theme.palette.border.tertiary,
+                    },
+                  },
+                  bgcolor: theme.palette.background.input,
+                }}
               />
-            </Grid>
-            <Grid xs={12} sm={8} md={4}>
               <Button
                 variant="contained"
                 type="submit"
@@ -102,20 +162,25 @@ export default function SignUp(): JSX.Element {
               >
                 Sign up
               </Button>
-            </Grid>
-            <Grid xs={12} sm={8} md={4}>
-              <Link to="/auth/signin">
-                <Button>Sign in</Button>
+            </Stack>
+          </form>
+          {errors.signUp !== null ? (
+            <ErrorAlert
+              message={createErrorMessage(
+                (errors.signUp as AxiosError).response?.status
+              )}
+            />
+          ) : null}
+          <Box>
+            Already have an account?{" "}
+            <RouterLink to="/auth/signin" style={{ textDecoration: "none" }}>
+              <Link underline="hover" component="span">
+                Sign in
               </Link>
-            </Grid>
-          </Grid>
-        </form>
+            </RouterLink>
+          </Box>
+        </Stack>
       </Stack>
-      {errors.signUp !== null ? (
-        <p style={{ color: "red" }}>
-          {handleSubmitError((errors.signUp as AxiosError).response?.status)}
-        </p>
-      ) : null}
     </Container>
   );
 }

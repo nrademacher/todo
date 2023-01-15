@@ -30,9 +30,12 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
   }
 
   return (
-    <ListItem sx={{ paddingLeft: 0 }}>
-      <Paper sx={{ padding: "1rem" }}>
-        <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
+    <ListItem sx={{ paddingLeft: 0, paddingRight: 0 }}>
+      <Paper sx={{ width: "100%", padding: "1rem" }}>
+        <Stack
+          direction="row"
+          sx={{ alignItems: "center", justifyContent: "space-between" }}
+        >
           <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
             <Checkbox
               id={localId}
