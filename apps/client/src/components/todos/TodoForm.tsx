@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTodos } from "../../hooks";
 
+import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -18,7 +19,7 @@ export const TodoForm: React.FC = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
 
   return (
