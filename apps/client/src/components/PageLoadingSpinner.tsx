@@ -1,5 +1,4 @@
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Box, CircularProgress } from "@mui/material";
 
 export const PageLoadingSpinner: React.FC = () => (
   <Box

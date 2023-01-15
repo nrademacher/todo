@@ -1,9 +1,6 @@
 import { useCurrentUser, useTodos } from "../../hooks";
 import { nanoid } from "nanoid";
-
-import CircularProgress from "@mui/material/CircularProgress";
-import List from "@mui/material/List";
-
+import { CircularProgress, List } from "@mui/material";
 import { TodoItem } from "./TodoItem";
 
 export const TodoList: React.FC = () => {

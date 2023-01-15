@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { useTodos } from "../../hooks";
-
-import CircularProgress from "@mui/material/CircularProgress";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, CircularProgress, Stack, TextField } from "@mui/material";
 
 export const TodoForm: React.FC = () => {
   const [todoDescription, setTodoDescription] = useState("");
-  const { isQueryLoading, add } = useTodos();
+  const { isQueryLoading, isAddMutationLoading, add } = useTodos();
 
   async function handleCreate(): Promise<void> {
     const newTodoParams = {
@@ -39,7 +35,7 @@ export const TodoForm: React.FC = () => {
         <Button
           variant="contained"
           type="submit"
-          disabled={todoDescription === ""}
+          disabled={todoDescription === "" || isAddMutationLoading}
           sx={{ width: "25%" }}
         >
           Create Todo

@@ -28,7 +28,7 @@ interface UseTodosResult {
   isQueryLoading: boolean;
   isAddMutationLoading: boolean;
   isUpdateMutationLoading: boolean;
-  isDeleteMutationLoading: boolean;
+  isRemoveMutationLoading: boolean;
 }
 
 export function useTodos(): UseTodosResult {
@@ -79,6 +79,6 @@ export function useTodos(): UseTodosResult {
     isQueryLoading: isLoading,
     isAddMutationLoading: create.isLoading,
     isUpdateMutationLoading: update.isLoading,
-    isDeleteMutationLoading: remove.isLoading,
+    isRemoveMutationLoading: remove.isLoading,
   };
 }

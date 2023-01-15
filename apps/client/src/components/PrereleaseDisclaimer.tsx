@@ -1,6 +1,4 @@
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-
+import { Alert, AlertTitle } from "@mui/material";
 import { APP_NAME } from "../constants";
 
 export const PrereleaseDisclaimer: React.FC = () => (

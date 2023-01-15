@@ -1,5 +1,9 @@
-import { createTheme, type Palette, type Theme } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import {
+  createTheme,
+  type Palette,
+  type Theme,
+  useMediaQuery,
+} from "@mui/material";
 import { useMemo } from "react";
 
 declare module "@mui/material/styles" {
@@ -46,7 +50,7 @@ export function useCustomTheme(): Theme {
           },
         },
       }),
-    [prefersDarkMode]
+    [prefersDarkMode],
   );
 
   return theme;

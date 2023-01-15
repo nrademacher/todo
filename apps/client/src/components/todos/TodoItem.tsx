@@ -1,21 +1,23 @@
 import type { Todo, TodoId } from "../../api";
 import { useTodos } from "../../hooks";
-
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Box } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  CircularProgress,
+  IconButton,
+  ListItem,
+  ListItemText,
+  Paper,
+  Stack,
+} from "@mui/material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 
 export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
   localId,
   todo,
 }) => {
-  const { isUpdateMutationLoading, update, remove } = useTodos();
+  const { isUpdateMutationLoading, isRemoveMutationLoading, update, remove } =
+    useTodos();
 
   async function handleCheckedChange(
     todoId: TodoId,
@@ -39,7 +41,7 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
           sx={{ alignItems: "center", justifyContent: "space-between" }}
         >
           <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            <Box sx={{ m: 1, position: "relative" }}>
+            <Box sx={{ position: "relative" }}>
               <Checkbox
                 id={localId}
                 data-testid={localId + "-input"}
@@ -70,14 +72,27 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
               role="todo-description"
             />
           </Stack>
-          <IconButton
-            size="small"
-            aria-label="delete"
-            onClick={async () => await handleDelete(todo.id)}
-            data-testid={localId + "-button"}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <Box sx={{ position: "relative" }}>
+            <IconButton
+              size="small"
+              aria-label="delete"
+              onClick={async () => await handleDelete(todo.id)}
+              data-testid={localId + "-button"}
+              disabled={isRemoveMutationLoading}
+            >
+              <DeleteIcon />
+            </IconButton>
+            {isRemoveMutationLoading && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: "absolute",
+                  top: "10%",
+                  left: "15%",
+                }}
+              />
+            )}
+          </Box>
         </Stack>
       </Paper>
     </ListItem>

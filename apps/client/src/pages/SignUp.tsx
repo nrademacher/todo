@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useAuth } from "../hooks";
-import { useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Link,
+  Stack,
+  TextField,
+  useTheme,
+} from "@mui/material";
 import type { CreateUserParams } from "../api";
 import { Link as RouterLink, Navigate } from "react-router-dom";
 import type { AxiosError } from "axios";
-
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-
 import { APP_NAME } from "../constants";
 import {
   ErrorAlert,
@@ -164,13 +164,15 @@ export default function SignUp(): JSX.Element {
               </Button>
             </Stack>
           </form>
-          {errors.signUp !== null ? (
-            <ErrorAlert
-              message={createErrorMessage(
-                (errors.signUp as AxiosError).response?.status
-              )}
-            />
-          ) : null}
+          {errors.signUp !== null
+            ? (
+              <ErrorAlert
+                message={createErrorMessage(
+                  (errors.signUp as AxiosError).response?.status,
+                )}
+              />
+            )
+            : null}
           <Box>
             Already have an account?{" "}
             <RouterLink to="/auth/signin" style={{ textDecoration: "none" }}>
