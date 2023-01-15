@@ -8,7 +8,7 @@ import { TodoItem } from "./TodoItem";
 
 export const TodoList: React.FC = () => {
   const { user } = useCurrentUser();
-  const { todos, errors, isLoading } = useTodos();
+  const { todos, errors, isQueryLoading } = useTodos();
 
   if (todos === null || user === null) {
     return null;
@@ -18,7 +18,7 @@ export const TodoList: React.FC = () => {
     return <div>Error</div>;
   }
 
-  if (isLoading) {
+  if (isQueryLoading) {
     return <CircularProgress />;
   }
 

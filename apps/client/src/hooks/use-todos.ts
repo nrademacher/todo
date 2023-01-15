@@ -16,16 +16,19 @@ import {
 
 interface UseTodosResult {
   todos: Todo[] | null;
+  add: UseMutateAsyncFunction<void, unknown, CreateTodoParams, unknown>;
+  update: UseMutateAsyncFunction<void, unknown, UpdateTodoParams, unknown>;
+  remove: UseMutateAsyncFunction<void, unknown, number, unknown>;
   errors: {
     queryError: unknown;
     createError: unknown;
     updateError: unknown;
     removeError: unknown;
   };
-  isLoading: boolean;
-  add: UseMutateAsyncFunction<void, unknown, CreateTodoParams, unknown>;
-  update: UseMutateAsyncFunction<void, unknown, UpdateTodoParams, unknown>;
-  remove: UseMutateAsyncFunction<void, unknown, number, unknown>;
+  isQueryLoading: boolean;
+  isAddMutationLoading: boolean;
+  isUpdateMutationLoading: boolean;
+  isDeleteMutationLoading: boolean;
 }
 
 export function useTodos(): UseTodosResult {
@@ -64,16 +67,18 @@ export function useTodos(): UseTodosResult {
 
   return {
     todos: typeof data === "undefined" ? null : data,
+    add: create.mutateAsync,
+    update: update.mutateAsync,
+    remove: remove.mutateAsync,
     errors: {
       queryError,
       createError: create.error,
       updateError: update.error,
       removeError: remove.error,
     },
-    isLoading:
-      isLoading || create.isLoading || update.isLoading || remove.isLoading,
-    add: create.mutateAsync,
-    update: update.mutateAsync,
-    remove: remove.mutateAsync,
+    isQueryLoading: isLoading,
+    isAddMutationLoading: create.isLoading,
+    isUpdateMutationLoading: update.isLoading,
+    isDeleteMutationLoading: remove.isLoading,
   };
 }

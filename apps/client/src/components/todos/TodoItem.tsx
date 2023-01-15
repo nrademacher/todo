@@ -9,12 +9,13 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/material";
 
 export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
   localId,
   todo,
 }) => {
-  const { isLoading, update, remove } = useTodos();
+  const { isUpdateMutationLoading, update, remove } = useTodos();
 
   async function handleCheckedChange(
     todoId: TodoId,
@@ -38,7 +39,7 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
           sx={{ alignItems: "center", justifyContent: "space-between" }}
         >
           <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            {isLoading ? <CircularProgress /> : (
+            <Box sx={{ m: 1, position: "relative" }}>
               <Checkbox
                 id={localId}
                 data-testid={localId + "-input"}
@@ -49,9 +50,20 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
                 checked={todo.done}
                 tabIndex={-1}
                 disableRipple
+                disabled={isUpdateMutationLoading}
                 inputProps={{ "aria-labelledby": localId + "-label" }}
               />
-            )}
+              {isUpdateMutationLoading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "-10%",
+                  }}
+                />
+              )}
+            </Box>
             <ListItemText
               id={localId + "-label"}
               primary={todo.description}
