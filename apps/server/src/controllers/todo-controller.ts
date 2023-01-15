@@ -9,7 +9,12 @@ import * as todoService from "../services/todo-service";
 
 export async function getTodos(reqId: UserId, res: Response): Promise<void> {
   const todos = await todoService.getTodos(reqId);
-  res.json(todos);
+  const sanitizedTodos = todos.map((todo) => {
+    const { user } = todo;
+    const { passwordHash, ...sanitizedUser } = user;
+    return { ...todo, user: sanitizedUser };
+  });
+  res.json(sanitizedTodos);
 }
 
 export async function getTodoById(
