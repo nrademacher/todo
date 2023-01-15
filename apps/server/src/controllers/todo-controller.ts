@@ -15,7 +15,7 @@ export async function getTodos(reqId: UserId, res: Response): Promise<void> {
 export async function getTodoById(
   reqId: UserId,
   id: TodoId,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
@@ -26,23 +26,27 @@ export async function getTodoById(
     res.sendStatus(403).end();
     return;
   }
-  res.json(todo);
+  const { user } = todo;
+  const { passwordHash, ...sanitizedUser } = user;
+  res.json({ ...todo, user: sanitizedUser });
 }
 
 export async function createTodo(
   params: CreateTodoParams,
   userId: UserId,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const todo = await todoService.createTodo(userId, params);
-  res.json(todo);
+  const { user } = todo;
+  const { passwordHash, ...sanitizedUser } = user;
+  res.json({ ...todo, user: sanitizedUser });
 }
 
 export async function updateTodo(
   reqId: UserId,
   id: TodoId,
   params: UpdateTodoParams,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
@@ -54,13 +58,17 @@ export async function updateTodo(
     return;
   }
   const updatedTodo = await todoService.updateTodo(todo.id, params);
-  res.json(updatedTodo);
+  if (updatedTodo) {
+    const { user } = updatedTodo;
+    const { passwordHash, ...sanitizedUser } = user;
+    res.json({ ...updatedTodo, user: sanitizedUser });
+  }
 }
 
 export async function deleteTodo(
   reqId: UserId,
   id: TodoId,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
