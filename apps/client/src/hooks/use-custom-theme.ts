@@ -11,6 +11,7 @@ declare module "@mui/material/styles" {
     palette: Palette & {
       background: TypeBackground & {
         secondary: string;
+        navbar?: string;
         input: string;
       };
       border: {
@@ -20,6 +21,7 @@ declare module "@mui/material/styles" {
   }
   export interface TypeBackground {
     secondary?: string;
+    navbar?: string;
     input?: string;
   }
   export interface PaletteOptions {
@@ -41,6 +43,9 @@ export function useCustomTheme(): Theme {
             secondary: prefersDarkMode
               ? "hsl(0, 0%, 9%)"
               : "hsl(205, 87%, 99%)",
+            navbar: prefersDarkMode
+              ? "hsl(0, 0%, 9%)"
+              : "#fff",
             input: prefersDarkMode ? "hsl(0, 0%, 14%)" : "#fff",
           },
           border: {
