@@ -1,4 +1,4 @@
-import { useAuth, useCurrentUser } from "../hooks";
+import { useAuth } from "../hooks";
 import {
   AppBar,
   Box,
@@ -13,12 +13,11 @@ import { PageRoutes } from "../constants";
 import { Home, Logout } from "@mui/icons-material";
 
 export const NavBar: React.FC = () => {
-  const { user } = useCurrentUser();
   const { signOut, isSignedIn } = useAuth();
 
   const theme = useTheme();
 
-  if (user == null || !isSignedIn) {
+  if (!isSignedIn) {
     return null;
   }
 
