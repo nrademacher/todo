@@ -13,9 +13,8 @@ appRouter.use("/todos", protect, todoRouter);
 appRouter.get("/", (_req: Request, res: Response) => {
   res.redirect("/user");
 });
-appRouter.get(
-  "/favicon.ico",
-  (_req: Request, res: Response) => res.sendStatus(204).end(),
+appRouter.get("/favicon.ico", (_req: Request, res: Response) =>
+  res.sendStatus(204).end()
 );
 
 appRouter.use(handleError);

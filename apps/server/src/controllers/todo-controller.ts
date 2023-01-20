@@ -20,7 +20,7 @@ export async function getTodos(reqId: UserId, res: Response): Promise<void> {
 export async function getTodoById(
   reqId: UserId,
   id: TodoId,
-  res: Response,
+  res: Response
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
@@ -39,7 +39,7 @@ export async function getTodoById(
 export async function createTodo(
   params: CreateTodoParams,
   userId: UserId,
-  res: Response,
+  res: Response
 ): Promise<void> {
   const todo = await todoService.createTodo(userId, params);
   const { user } = todo;
@@ -51,7 +51,7 @@ export async function updateTodo(
   reqId: UserId,
   id: TodoId,
   params: UpdateTodoParams,
-  res: Response,
+  res: Response
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
@@ -73,7 +73,7 @@ export async function updateTodo(
 export async function deleteTodo(
   reqId: UserId,
   id: TodoId,
-  res: Response,
+  res: Response
 ): Promise<void> {
   const todo = await todoService.getTodoById(id);
   if (todo == null) {
