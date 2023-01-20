@@ -7,7 +7,7 @@ import { config } from "./configs";
 
 const app = express();
 
-const logFormat = config.env !== "production" ? "dev" : "combined"
+const logFormat = config.env !== "production" ? "dev" : "combined";
 app.use(morgan(logFormat));
 
 app.use(cors());
