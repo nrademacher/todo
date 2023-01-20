@@ -27,7 +27,7 @@ export const NavBar: React.FC = () => {
       position="sticky"
       sx={{
         px: 2,
-        bgcolor: "white",
+        bgcolor: "transparent",
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }} disableGutters>
