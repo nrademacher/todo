@@ -1,5 +1,5 @@
 import type { Todo, TodoId } from "../../api";
-import { useTodos } from "../../hooks";
+import { useTodoEditor, useTodos } from "../../hooks";
 import {
   Box,
   Checkbox,
@@ -10,14 +10,22 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 
-export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
-  localId,
-  todo,
-}) => {
+interface ITodoItem {
+  localId: string;
+  todo: Todo;
+}
+
+export const TodoItem: React.FC<ITodoItem> = ({ localId, todo }) => {
   const { isUpdateMutationLoading, isRemoveMutationLoading, update, remove } =
     useTodos();
+  const { setEditorTodo, openEditor } = useTodoEditor();
+
+  function handleOpenEditor(): void {
+    setEditorTodo(todo);
+    openEditor();
+  }
 
   async function handleCheckedChange(
     todoId: TodoId,
@@ -73,27 +81,50 @@ export const TodoItem: React.FC<{ localId: string; todo: Todo }> = ({
               role="todo-description"
             />
           </Stack>
-          <Box sx={{ position: "relative" }}>
-            <IconButton
-              size="small"
-              aria-label="delete"
-              onClick={async () => await handleDelete(todo.id)}
-              data-testid={localId + "-button"}
-              disabled={isRemoveMutationLoading}
-            >
-              <DeleteIcon />
-            </IconButton>
-            {isRemoveMutationLoading && (
-              <CircularProgress
-                size={24}
-                sx={{
-                  position: "absolute",
-                  top: "10%",
-                  left: "15%",
-                }}
-              />
-            )}
-          </Box>
+          <Stack direction="row" spacing={2}>
+            <Box sx={{ position: "relative" }}>
+              <IconButton
+                size="small"
+                aria-label="edit"
+                onClick={handleOpenEditor}
+                data-testid={localId + "-edit-button"}
+                disabled={isUpdateMutationLoading}
+              >
+                <EditIcon />
+              </IconButton>
+              {isUpdateMutationLoading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "10%",
+                    left: "15%",
+                  }}
+                />
+              )}
+            </Box>
+            <Box sx={{ position: "relative" }}>
+              <IconButton
+                size="small"
+                aria-label="delete"
+                onClick={async () => await handleDelete(todo.id)}
+                data-testid={localId + "-delete-button"}
+                disabled={isRemoveMutationLoading}
+              >
+                <DeleteIcon />
+              </IconButton>
+              {isRemoveMutationLoading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "10%",
+                    left: "15%",
+                  }}
+                />
+              )}
+            </Box>
+          </Stack>
         </Stack>
       </Paper>
     </ListItem>
