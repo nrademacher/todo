@@ -48,8 +48,8 @@ export const TodoItem: React.FC<ITodoItem> = ({ localId, todo }) => {
 
   return (
     <>
-      <ListItem sx={{ paddingLeft: 0, paddingRight: 0 }}>
-        <Paper sx={{ width: "100%", padding: "1rem" }}>
+      <ListItem sx={{ px: 0, pt: 0, pb: 1 }}>
+        <Paper sx={{ width: "100%", py: 1.5, px: 2 }}>
           <Stack
             direction="row"
             sx={{ alignItems: "center", justifyContent: "space-between" }}
@@ -83,8 +83,9 @@ export const TodoItem: React.FC<ITodoItem> = ({ localId, todo }) => {
               </Box>
               <ListItemText
                 id={localId + "-label"}
-                primary={todo.description}
-                role="todo-description"
+                primary={todo.title}
+                secondary={todo.description}
+                role="todo-text"
               />
             </Stack>
             <Stack direction="row" spacing={2}>

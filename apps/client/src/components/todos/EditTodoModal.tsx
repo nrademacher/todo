@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
   TextField,
 } from "@mui/material";
 
@@ -21,6 +22,7 @@ export const EditTodoModal: React.FC<IEditTodoModal> = ({
   closeModal,
   todo,
 }) => {
+  const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description);
   const { update } = useTodos();
 
@@ -30,6 +32,7 @@ export const EditTodoModal: React.FC<IEditTodoModal> = ({
 
   async function handleUpdate(): Promise<void> {
     const updateTodoParams = {
+      title,
       description,
     };
     await update({ id: todo.id, payload: updateTodoParams });
@@ -45,19 +48,30 @@ export const EditTodoModal: React.FC<IEditTodoModal> = ({
           await handleUpdate();
         }}
       >
-        <DialogContent>
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button type="submit">Save</Button>
-        </DialogActions>
+        <Stack spacing={2}>
+          <DialogContent>
+            <Stack spacing={2}>
+              <TextField
+                label="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                fullWidth
+                variant="standard"
+              />
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseModal}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </Stack>
       </form>
     </Dialog>
   );

@@ -42,7 +42,8 @@ describe("todoRouter", () => {
     requestBody: CreateTodoParams;
   }> {
     const requestBody: CreateTodoParams = {
-      description: "Test todo",
+      title: "Test title",
+      description: "Test description",
       done: false,
     };
     const res = await supertest(app)
@@ -68,6 +69,7 @@ describe("todoRouter", () => {
   it("should respond with appropriate status and error(s) on invalid body param(s) in POST requests to /todos", async () => {
     const { res: signUpRes } = await userSignUpRequest();
     const requestBody = {
+      title: "",
       description: 42,
       done: false,
     };
@@ -80,10 +82,16 @@ describe("todoRouter", () => {
     expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
       errors: [
         {
-          value: 42,
+          location: "body",
+          msg: "Invalid value",
+          param: "title",
+          value: "",
+        },
+        {
+          location: "body",
           msg: "Invalid value",
           param: "description",
-          location: "body",
+          value: 42,
         },
       ],
     });
@@ -154,6 +162,8 @@ describe("todoRouter", () => {
 
   it("should respond with 401 to unauthorized PATCH requests to /todos/:id", async () => {
     const requestBody: UpdateTodoParams = {
+      title: "update title test",
+      description: "update description test",
       done: true,
     };
     const { res: signUpRes } = await userSignUpRequest();
@@ -167,6 +177,8 @@ describe("todoRouter", () => {
 
   it("should respond with 403 to PATCH requests to /todos/:id with authorization mismatch", async () => {
     const requestBody: UpdateTodoParams = {
+      title: "update title test",
+      description: "update description test",
       done: true,
     };
     const { res: signUpResOne } = await userSignUpRequest("test1@test.com");
@@ -182,6 +194,8 @@ describe("todoRouter", () => {
 
   it("should respond with 404 to PATCH requests to /todos/:id where no todo was found for id", async () => {
     const requestBody: UpdateTodoParams = {
+      title: "update title test",
+      description: "update description test",
       done: true,
     };
     const { res: signUpRes } = await userSignUpRequest();
@@ -195,6 +209,8 @@ describe("todoRouter", () => {
 
   it("should respond with updated todo to valid PATCH requests to /todos/:id", async () => {
     const requestBody: UpdateTodoParams = {
+      title: "update title test",
+      description: "update description test",
       done: true,
     };
     const { res: signUpRes } = await userSignUpRequest();
@@ -212,6 +228,7 @@ describe("todoRouter", () => {
     const { res: signUpRes } = await userSignUpRequest();
     await createTodo(signUpRes.body.token);
     const requestBody = {
+      title: "",
       description: 42,
       done: false,
     };
@@ -224,10 +241,16 @@ describe("todoRouter", () => {
     expect(JSON.parse((res.error as { text: string }).text)).toStrictEqual({
       errors: [
         {
-          value: 42,
+          location: "body",
+          msg: "Invalid value",
+          param: "title",
+          value: "",
+        },
+        {
+          location: "body",
           msg: "Invalid value",
           param: "description",
-          location: "body",
+          value: 42,
         },
       ],
     });

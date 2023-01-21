@@ -6,6 +6,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "nodemon src/server.ts",
+    "db:migrate": "pnpm typeorm-ts-node-esm migration:generate -d ./src/database/data-source.ts",
     "db:drop": "pnpm typeorm-ts-node-esm schema:drop -d ./src/database/data-source.ts",
     "format": "prettier --ignore-path .gitignore \"**/*.+(ts|js|json)\" --write --list-different",
     "lint": "eslint . --fix",
