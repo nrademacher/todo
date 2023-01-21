@@ -6,7 +6,8 @@
   "author": "Nikolay Rademacher",
   "license": "ISC",
   "scripts": {
-    "db:up": "docker compose up -d",
+    "db:up": "docker compose -f docker-compose.development.yaml up -d",
+    "db:down": "docker compose -f docker-compose.development.yaml down",
     "db:drop": "pnpm --filter server db:drop",
     "dev:server": "pnpm --filter server dev",
     "dev:client": "pnpm --filter client dev",
