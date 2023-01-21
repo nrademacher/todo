@@ -1,8 +1,9 @@
 {
   "name": "@todo/server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
-  "main": "index.js",
+  "author": "Nikolay Rademacher",
+  "license": "ISC",
   "scripts": {
     "dev": "nodemon src/server.ts",
     "db:drop": "pnpm typeorm-ts-node-esm schema:drop -d ./src/database/data-source.ts",
@@ -12,8 +13,6 @@
     "build": "tsc -p tsconfig.json",
     "start": "NODE_ENV=development typeorm migration:run -d ./dist/database/data-source.js && NODE_ENV=production node dist/server.js"
   },
-  "author": "Nikolay Rademacher",
-  "license": "ISC",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.13",

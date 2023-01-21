@@ -1,8 +1,10 @@
 {
   "name": "todo",
-  "version": "0.0.1",
   "description": "Full-stack Todo app",
-  "main": "index.js",
+  "version": "0.0.2",
+  "private": true,
+  "author": "Nikolay Rademacher",
+  "license": "ISC",
   "scripts": {
     "db:up": "docker compose up -d",
     "db:drop": "pnpm --filter server db:drop",
@@ -23,9 +25,6 @@
     "preview": "concurrently \"pnpm start:server\" \"pnpm dev:client\"",
     "update-deps": "pnpm -r update"
   },
-  "keywords": [],
-  "author": "Nikolay Rademacher",
-  "license": "ISC",
   "devDependencies": {
     "concurrently": "^7.6.0"
   }
