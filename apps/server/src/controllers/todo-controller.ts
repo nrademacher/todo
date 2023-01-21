@@ -63,7 +63,7 @@ export async function updateTodo(
     return;
   }
   const updatedTodo = await todoService.updateTodo(todo.id, params);
-  if (updatedTodo) {
+  if (updatedTodo != null) {
     const { user } = updatedTodo;
     const { passwordHash, ...sanitizedUser } = user;
     res.json({ ...updatedTodo, user: sanitizedUser });
