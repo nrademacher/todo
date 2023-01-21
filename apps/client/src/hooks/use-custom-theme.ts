@@ -43,9 +43,7 @@ export function useCustomTheme(): Theme {
             secondary: prefersDarkMode
               ? "hsl(0, 0%, 9%)"
               : "hsl(205, 87%, 99%)",
-            navbar: prefersDarkMode
-              ? "hsl(0, 0%, 9%)"
-              : "#fff",
+            navbar: prefersDarkMode ? "hsl(0, 0%, 9%)" : "#fff",
             input: prefersDarkMode ? "hsl(0, 0%, 14%)" : "#fff",
           },
           border: {
