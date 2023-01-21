@@ -7,7 +7,8 @@ import { nanoid } from "nanoid";
 
 const TODO: Todo = {
   id: 1,
-  description: "Test",
+  title: "Test title",
+  description: "Test description",
   done: false,
   user: {
     username: "tester",
@@ -29,12 +30,21 @@ function renderTodo(todo: Todo, id: string): RenderResult {
 }
 
 describe("TodoItem", () => {
+  it("renders the title", async () => {
+    const todo = TODO;
+    const id = nanoid();
+    const todoItem = renderTodo(todo, id);
+    const todoDescription = await todoItem.findByRole("todo-text");
+    expect(todoDescription.children[0].textContent).toEqual(todo.title);
+    todoItem.unmount();
+  });
+
   it("renders the description", async () => {
     const todo = TODO;
     const id = nanoid();
     const todoItem = renderTodo(todo, id);
-    const todoDescription = await todoItem.findByRole("todo-description");
-    expect(todoDescription.innerText).toEqual(todo.description);
+    const todoDescription = await todoItem.findByRole("todo-text");
+    expect(todoDescription.children[1].textContent).toEqual(todo.description);
     todoItem.unmount();
   });
 
