@@ -9,16 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: Development
     env:
-      NODE_ENV: development
-      STAGE: testing
-      PORT: 3004
       DB_HOST: localhost
       DB_PORT: 3307
       DB_NAME: todo
       DB_USERNAME: root
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      VITE_API_URL: http://localhost:3004
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -51,6 +46,13 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Test
+        env:
+          STAGE: testing
+          PORT: 3004
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          VITE_API_URL: http://localhost:3004
         run: pnpm test
       - name: Build
+        env:
+          NODE_ENV: production
         run: pnpm build
