@@ -7,8 +7,9 @@
   "license": "ISC",
   "scripts": {
     "db:up": "docker compose -f docker-compose.development.yaml up -d",
-    "db:down": "docker compose -f docker-compose.development.yaml down",
+    "db:migrate": "pnpm --filter server db:migrate",
     "db:drop": "pnpm --filter server db:drop",
+    "db:down": "docker compose -f docker-compose.development.yaml down",
     "dev:server": "pnpm --filter server dev",
     "dev:client": "pnpm --filter client dev",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
