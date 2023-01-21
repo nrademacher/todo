@@ -1,4 +1,6 @@
-import { useTodoEditor, useTodos } from "../../hooks";
+import type { Todo } from "../../api";
+import { useState } from "react";
+import { useTodos } from "../../hooks";
 import {
   Button,
   Dialog,
@@ -10,42 +12,53 @@ import {
 
 interface IEditTodoModal {
   isModalOpen: boolean;
+  todo: Todo;
+  closeModal: () => void;
 }
 
-export const EditTodoModal: React.FC<IEditTodoModal> = ({ isModalOpen }) => {
+export const EditTodoModal: React.FC<IEditTodoModal> = ({
+  isModalOpen,
+  closeModal,
+  todo,
+}) => {
+  const [description, setDescription] = useState(todo.description);
   const { update } = useTodos();
-  const { currentTodo, editCurrentTodo, closeEditor } = useTodoEditor();
 
   function handleCloseModal(): void {
-    closeEditor();
+    closeModal();
   }
 
-  async function handleEditDescription(): Promise<void> {
+  async function handleUpdate(): Promise<void> {
     const updateTodoParams = {
-      description: currentTodo.description,
+      description,
     };
-    await update({ id: currentTodo.id, payload: updateTodoParams });
-    closeEditor();
+    await update({ id: todo.id, payload: updateTodoParams });
+    closeModal();
   }
 
   return (
     <Dialog open={isModalOpen} onClose={handleCloseModal} fullWidth>
       <DialogTitle>Edit Todo details</DialogTitle>
-      <DialogContent>
-        <TextField
-          label="Description"
-          value={currentTodo.description}
-          onChange={(e) => editCurrentTodo({ description: e.target.value })}
-          fullWidth
-          variant="standard"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseModal}>Cancel</Button>
-        <Button onClick={async () => await handleEditDescription()}>
-          Save
-        </Button>
-      </DialogActions>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await handleUpdate();
+        }}
+      >
+        <DialogContent>
+          <TextField
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal}>Cancel</Button>
+          <Button type="submit">Save</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
