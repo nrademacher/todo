@@ -20,7 +20,8 @@
     "build:client": "pnpm --filter client build",
     "build": "pnpm build:server && pnpm build:client",
     "start:server": "pnpm --filter server start",
-    "preview": "concurrently \"pnpm start:server\" \"pnpm dev:client\""
+    "preview": "concurrently \"pnpm start:server\" \"pnpm dev:client\"",
+    "update-deps": "pnpm -r update"
   },
   "keywords": [],
   "author": "Nikolay Rademacher",
