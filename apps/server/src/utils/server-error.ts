@@ -15,13 +15,13 @@ export class ServerError extends Error {
     this.type = type;
     if (this.type === ServerErrorTypes.AUTH) {
       this.statusCode = 401;
-      this.message = "Unauthorized";
+      this.message = "Unauthorized - " + this.originalMessage;
     } else if (this.type === ServerErrorTypes.INPUT) {
       this.statusCode = 400;
-      this.message = "Invalid input";
+      this.message = "Invalid input - " + this.originalMessage;
     } else {
       this.statusCode = 500;
-      this.message = "Internal server error";
+      this.message = "Internal server error - " + this.originalMessage;
     }
   }
 }

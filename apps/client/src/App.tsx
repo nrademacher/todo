@@ -18,9 +18,9 @@ export function App(): JSX.Element {
     <ThemeProvider theme={customTheme}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <NavBar />
-          <Suspense fallback={<PageLoadingSpinner />}>
+        <Suspense fallback={<PageLoadingSpinner />}>
+          <BrowserRouter>
+            <NavBar />
             <Routes>
               <Route
                 path="/"
@@ -33,8 +33,8 @@ export function App(): JSX.Element {
               <Route path="/auth/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
             </Routes>
-          </Suspense>
-        </BrowserRouter>
+          </BrowserRouter>
+        </Suspense>
       </QueryClientProvider>
     </ThemeProvider>
   );
