@@ -46,7 +46,8 @@ todoRouter.post(
   "/",
   [
     body("done").toBoolean().exists(),
-    body("description").isString().isLength({ min: 1 }).exists(),
+    body("title").isString().isLength({ min: 1 }).exists(),
+    body("description").isString().isLength({ min: 1 }).optional(),
     validate,
   ],
   async (req: Request, res: Response, next: NextFunction) => {
@@ -66,6 +67,7 @@ todoRouter.patch(
   [
     param("id").toInt().exists(),
     body("done").toBoolean().optional(),
+    body("title").isString().isLength({ min: 1 }).optional(),
     body("description").isString().isLength({ min: 1 }).optional(),
     validate,
   ],

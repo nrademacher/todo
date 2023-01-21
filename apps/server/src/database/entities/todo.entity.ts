@@ -7,7 +7,10 @@ export class Todo {
   id: number;
 
   @Column()
-  description: string;
+  title: string;
+
+  @Column({ default: "" })
+  description?: string;
 
   @Column({ default: false })
   done: boolean;

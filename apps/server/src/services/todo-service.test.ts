@@ -26,6 +26,7 @@ describe("todo service", () => {
       email: "test@testing.com",
     });
     const todo = await createTodo(user.id, {
+      title: "Test todo",
       description: "Lorem ipsum",
       done: false,
     });
@@ -41,6 +42,7 @@ describe("todo service", () => {
       email: "test@testing.com",
     });
     const todoParams: CreateTodoParams = {
+      title: "Test todo",
       description: "Lorem ipsum",
       done: false,
     };
@@ -58,6 +60,7 @@ describe("todo service", () => {
       email: "test@testing.com",
     });
     const { id: todoId } = await createTodo(user.id, {
+      title: "Test todo",
       description: "Lorem ipsum",
       done: false,
     });
@@ -73,6 +76,7 @@ describe("todo service", () => {
       email: "test@testing.com",
     });
     const { id: todoId } = await createTodo(user.id, {
+      title: "Test todo",
       description: "Lorem ipsum",
       done: false,
     });
@@ -88,6 +92,7 @@ describe("todo service", () => {
       email: "test@testing.com",
     });
     const { id: todoId } = await createTodo(user.id, {
+      title: "Test todo",
       description: "Lorem ipsum",
       done: false,
     });
