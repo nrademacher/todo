@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks";
+import { useAuth, useCurrentUser } from "../hooks";
 import {
   AppBar,
   Box,
@@ -14,10 +14,11 @@ import { Home, Logout } from "@mui/icons-material";
 
 export const NavBar: React.FC = () => {
   const { signOut, isSignedIn } = useAuth();
+  const { user } = useCurrentUser();
 
   const theme = useTheme();
 
-  if (!isSignedIn) {
+  if (!isSignedIn || !user) {
     return null;
   }
 
@@ -49,16 +50,21 @@ export const NavBar: React.FC = () => {
             </RouterLink>
           </Stack>
         </Stack>
-        <Button
-          size="small"
-          onClick={() => signOut()}
-          sx={{
-            color: theme.palette.text.secondary,
-            display: { xs: "none", md: "inline-block" },
-          }}
-        >
-          Sign out
-        </Button>
+        <Stack direction="row" spacing={4} alignItems="baseline">
+          <Box>
+            Welcome, <span style={{ fontWeight: "bold" }}>{user.username}</span>
+          </Box>
+          <Button
+            size="small"
+            onClick={() => signOut()}
+            sx={{
+              color: theme.palette.text.secondary,
+              display: { xs: "none", md: "inline-block" },
+            }}
+          >
+            Sign out
+          </Button>
+        </Stack>
         <IconButton
           onClick={() => signOut()}
           sx={{
