@@ -51,7 +51,11 @@ export const NavBar: React.FC = () => {
           </Stack>
         </Stack>
         <Stack direction="row" spacing={4} alignItems="baseline">
-          <Box>
+          <Box
+            sx={{
+              display: { xs: "none", md: "inline-block" },
+            }}
+          >
             Welcome, <span style={{ fontWeight: "bold" }}>{user.username}</span>
           </Box>
           <Button
