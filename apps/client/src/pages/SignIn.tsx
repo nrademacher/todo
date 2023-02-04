@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useAuth } from "../hooks";
+import { useContext, useState } from "react";
+import { AuthContext } from "../contexts";
 import {
   Box,
   Button,
@@ -19,7 +19,7 @@ export default function SignIn(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoading, isSignedIn, signIn, errors } = useAuth();
+  const { isLoading, isSignedIn, signIn, errors} = useContext(AuthContext)
 
   const theme = useTheme();
 

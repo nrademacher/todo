@@ -14,7 +14,7 @@ import {
   type UserAuthResponse,
 } from "../api";
 
-interface UseAuthResult {
+export interface UseAuthResult {
   errors: {
     signUp: unknown;
     signIn: unknown;
@@ -38,8 +38,8 @@ interface UseAuthResult {
 }
 
 export function useAuth(): UseAuthResult {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   async function handleSignInSuccess(data: UserAuthResponse): Promise<void> {
     const { token } = data;

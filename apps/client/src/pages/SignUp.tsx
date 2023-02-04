@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useAuth } from "../hooks";
+import { useContext, useState } from "react";
+import { AuthContext } from "../contexts";
 import {
   Box,
   Button,
@@ -24,7 +24,7 @@ export default function SignUp(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoading, signUp, isSignedIn, errors } = useAuth();
+  const { isLoading, signUp, isSignedIn, errors } = useContext(AuthContext);
 
   const theme = useTheme();
 
@@ -164,13 +164,15 @@ export default function SignUp(): JSX.Element {
               </Button>
             </Stack>
           </form>
-          {errors.signUp !== null ? (
-            <ErrorAlert
-              message={createErrorMessage(
-                (errors.signUp as AxiosError).response?.status
-              )}
-            />
-          ) : null}
+          {errors.signUp !== null
+            ? (
+              <ErrorAlert
+                message={createErrorMessage(
+                  (errors.signUp as AxiosError).response?.status,
+                )}
+              />
+            )
+            : null}
           <Box>
             Already have an account?{" "}
             <RouterLink to="/auth/signin" style={{ textDecoration: "none" }}>
