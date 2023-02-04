@@ -1,7 +1,7 @@
 {
   "env": {
-    "browser": true,
-    "es2021": true
+    "es2021": true,
+    "browser": true
   },
   "extends": [
     "standard-with-typescript",
@@ -30,6 +30,13 @@
         "checksVoidReturn": {
           "attributes": false
         }
+      }
+    ],
+    "@typescript-eslint/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "as",
+        "objectLiteralTypeAssertions": "allow-as-parameter"
       }
     ]
   }

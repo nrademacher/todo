@@ -19,7 +19,7 @@ export default function SignIn(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoading, isSignedIn, signIn, errors} = useContext(AuthContext)
+  const { isLoading, isSignedIn, signIn, errors } = useContext(AuthContext);
 
   const theme = useTheme();
 

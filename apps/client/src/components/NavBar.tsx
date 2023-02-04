@@ -20,7 +20,7 @@ export const NavBar: React.FC = () => {
 
   const theme = useTheme();
 
-  if (!isSignedIn || !user) {
+  if (!isSignedIn || user == null) {
     return null;
   }
 
